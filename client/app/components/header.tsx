@@ -5,13 +5,15 @@ import Image from "next/image";
 import { Search, MapPin, ShoppingCart, Menu, Globe } from "lucide-react";
 import { navigationItems } from "../data/mockData";
 import ToggleWrapper from "./toggle";
+import { useAppSelector } from "../store/hooks";
+import { selectMode } from "../store/modeSlice";
 
 export default function Header() {
   const [searchQuery, setSearchQuery] = useState("");
-
+  const mode = useAppSelector(selectMode) as "green" | "home";
   return (
-    <header className="bg-gray-900 text-white">
-      <div className="bg-gray-900 px-4 py-2">
+    <header className={`${mode == "home" ? "bg-gray-900" : "bg-green-700"}  text-white`}>
+      <div className={`${mode == "home" ? "bg-gray-900" : "bg-green-700"} px-4 py-2`}>
         <div className="flex items-center justify-between px-2 mx-auto">
           <div className="flex items-center space-x-4">
             <div className="flex items-start mt-3">
@@ -76,7 +78,7 @@ export default function Header() {
         </div>
       </div>
 
-      <div className="bg-gray-800 px-4 py-2 flex justify-between">
+      <div className={`${mode == "home" ? "bg-gray-800" : "bg-green-800"}  px-4 py-2 flex justify-between`}>
         <div className="flex items-center space-x-6  overflow-x-auto">
           <button className="flex items-center text-sm whitespace-nowrap">
             <Menu className="h-4 w-4 mr-2" />

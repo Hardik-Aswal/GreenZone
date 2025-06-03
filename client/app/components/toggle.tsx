@@ -43,7 +43,7 @@ useEffect(() => {
 
             <button
               onClick={handleCheckItOut}
-              className="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded-md text-sm font-medium transition-colors w-full"
+              className="bg-green-700 hover:bg-green-600 text-white px-4 py-2 rounded-md text-sm font-medium transition-colors w-full"
             >
               Check it out
             </button>

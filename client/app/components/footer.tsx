@@ -3,6 +3,8 @@
 import Link from "next/link";
 import Image from "next/image";
 import { ChevronUp } from "lucide-react";
+import { useAppSelector } from "../store/hooks";
+import { selectMode } from "../store/modeSlice";
 
 interface FooterCategory {
   title: string;
@@ -76,6 +78,7 @@ const countries = [
 ];
 
 export default function Footer() {
+  const mode = useAppSelector(selectMode) as "green" | "home";
   const scrollToTop = () => {
     window.scrollTo({
       top: 0,
@@ -87,13 +90,14 @@ export default function Footer() {
     <footer className="mt-auto">
       <button
         onClick={scrollToTop}
-        className="w-full bg-gray-700 hover:bg-gray-600 text-white py-4 text-sm font-medium flex items-center justify-center transition-colors"
+        className={`w-full ${mode == "home" ? "bg-gray-600" : "bg-green-700"}   text-white py-4 text-sm font-medium flex items-center justify-center transition-colors`}
       >
         <ChevronUp className="h-4 w-4 mr-2" />
         Back to top
       </button>
 
-      <div className="bg-gray-800 py-10">
+      <div className={`${mode == "home" ? "bg-gray-900" : "bg-green-800"}  py-10`
+      }>
         <div className="max-w-7xl mx-auto px-4 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
           {footerCategories.map((category) => (
             <div key={category.title}>
@@ -115,7 +119,7 @@ export default function Footer() {
         </div>
       </div>
 
-      <div className="bg-gray-800 border-t border-gray-700 py-8">
+      <div className={`${mode == "home" ? "bg-gray-900" : "bg-green-700"}  border-t border-gray-700 py-8`}>
         <div className="max-w-7xl mx-auto px-4 flex flex-col items-center">
           <div className="mb-4">
             <Image
@@ -137,7 +141,7 @@ export default function Footer() {
         </div>
       </div>
 
-      <div className="bg-gray-900 py-6">
+      <div className={`${mode == "home" ? "bg-gray-900" : "bg-green-800"} py-6`}>
         <div className="max-w-7xl mx-auto px-4">
           <div className="flex flex-col gap-2 items-center">
             <div className="space-y-2">
