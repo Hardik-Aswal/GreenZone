@@ -6,7 +6,7 @@ interface ProductCardProps {
 }
 
 export default function ProductCard({ product }: ProductCardProps) {
-  console.log(product);
+
   return (
     <div className="bg-white rounded-lg overflow-hidden group cursor-pointer">
       <div className="aspect-square relative overflow-hidden">

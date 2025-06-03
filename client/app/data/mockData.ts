@@ -11,15 +11,7 @@ export const navigationItems: NavItem[] = [
   { id: "8", label: "Customer Service", href: "#" },
   { id: "9", label: "Fashion", href: "#" },
   { id: "10", label: "New Releases", href: "#" },
-  { id: "11", label: "Amazon Pay", href: "#" },
-  { id: "12", label: "Electronics", href: "#" },
-  { id: "13", label: "Home & Kitchen", href: "#" },
-  { id: "14", label: "Car & Motorbike", href: "#" },
-  { id: "15", label: "Computers", href: "#" },
-  { id: "16", label: "Books", href: "#" },
-  //   { id: "17", label: "Toys & Games", href: "#" },
-  //   { id: "18", label: "Gift Ideas", href: "#" },
-  //   { id: "19", label: "Beauty & Personal Care", href: "#" },
+ 
 ];
 
 export const heroBanners: HeroBanner[] = [

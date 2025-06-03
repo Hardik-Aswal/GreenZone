@@ -4,6 +4,7 @@ import { useState } from "react";
 import Image from "next/image";
 import { Search, MapPin, ShoppingCart, Menu, Globe } from "lucide-react";
 import { navigationItems } from "../data/mockData";
+import ToggleWrapper from "./toggle";
 
 export default function Header() {
   const [searchQuery, setSearchQuery] = useState("");
@@ -75,8 +76,8 @@ export default function Header() {
         </div>
       </div>
 
-      <div className="bg-gray-800 px-4 py-2">
-        <div className="flex items-center space-x-6 mx-auto overflow-x-auto">
+      <div className="bg-gray-800 px-4 py-2 flex justify-between">
+        <div className="flex items-center space-x-6  overflow-x-auto">
           <button className="flex items-center text-sm whitespace-nowrap">
             <Menu className="h-4 w-4 mr-2" />
             All
@@ -91,6 +92,7 @@ export default function Header() {
             </a>
           ))}
         </div>
+        <ToggleWrapper/>
       </div>
     </header>
   );
