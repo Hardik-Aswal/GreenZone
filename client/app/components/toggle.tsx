@@ -9,9 +9,16 @@ import { change, selectMode } from "../store/modeSlice";
 
 const ToggleWrapper = () => {
   const mode = useAppSelector(selectMode) as "green" | "home";
+  const [showTooltip, setShowTooltip] = useState(true)
   const dispatch = useAppDispatch();
   const router = useRouter();
   const pathname = usePathname();
+  const handleCheckItOut = () => {
+    setShowTooltip(false)
+   
+    console.log("Greenzone feature clicked!")
+  }
+
 useEffect(() => {
   if (mode === "green" && pathname !== "/gogreen") {
     router.push("/gogreen");
@@ -21,11 +28,28 @@ useEffect(() => {
 }, [mode, pathname, router]);
   return (
     <div
-     
+     className="relative"
     >
       <ModeToggle mode={mode} setMode={()=>{
         dispatch(change())
       }} />
+      {showTooltip && (
+        <div className="absolute right-0 top-full mt-2 z-50">
+          <div className="bg-white text-gray-900 rounded-lg shadow-lg p-4 min-w-[250px] relative">
+ 
+            <div className="absolute -top-2 right-4 w-4 h-4 bg-white transform rotate-45 border-l border-t border-gray-200"></div>
+
+            <div className="text-sm font-medium mb-3">Introducing GreenZone</div>
+
+            <button
+              onClick={handleCheckItOut}
+              className="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded-md text-sm font-medium transition-colors w-full"
+            >
+              Check it out
+            </button>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
