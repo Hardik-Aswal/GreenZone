@@ -1,4 +1,4 @@
-"use client"
+"use client";
 import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import { motion } from "framer-motion";
 
@@ -9,34 +9,35 @@ import { change, selectMode } from "../store/modeSlice";
 
 const ToggleWrapper = () => {
   const mode = useAppSelector(selectMode) as "green" | "home";
-  const [showTooltip, setShowTooltip] = useState(true)
+  const [showTooltip, setShowTooltip] = useState(true);
   const dispatch = useAppDispatch();
   const router = useRouter();
   const pathname = usePathname();
   const handleCheckItOut = () => {
-    setShowTooltip(false)
-   
-    console.log("Greenzone feature clicked!")
-  }
+    setShowTooltip(false);
 
-useEffect(() => {
-  if (mode === "green" && pathname !== "/gogreen") {
-    router.push("/gogreen");
-  } else if (mode === "home" && pathname !== "/") {
-    router.push("/");
-  }
-}, [mode, pathname, router]);
+    console.log("Greenzone feature clicked!");
+  };
+
+  useEffect(() => {
+    if (pathname !== "/" && pathname !== "/gogreen") return;
+    if (mode === "green" && pathname !== "/gogreen") {
+      router.push("/gogreen");
+    } else if (mode === "home" && pathname !== "/") {
+      router.push("/");
+    }
+  }, [mode, pathname, router]);
   return (
-    <div
-     className="relative"
-    >
-      <ModeToggle mode={mode} setMode={()=>{
-        dispatch(change())
-      }} />
+    <div className="relative">
+      <ModeToggle
+        mode={mode}
+        setMode={() => {
+          dispatch(change());
+        }}
+      />
       {showTooltip && (
         <div className="absolute right-0 top-full mt-2 z-50">
           <div className="bg-white text-gray-900 rounded-lg shadow-lg p-4 min-w-[250px] relative">
- 
             <div className="absolute -top-2 right-4 w-4 h-4 bg-white transform rotate-45 border-l border-t border-gray-200"></div>
 
             <div className="text-sm font-medium mb-3">Introducing GreenZone</div>
@@ -65,13 +66,11 @@ const ModeToggle = ({
     <button
       onClick={() => setMode(mode === "green" ? "home" : "green")}
       className={`p-2 w-28 rounded-full flex shadow-lg relative bg-gradient-to-b ${
-        mode === "home"
-          ? "justify-end from-slate-500 to-slate-700"
-          : "justify-start from-green-700 to-green-400"
+        mode === "home" ? "justify-end from-slate-500 to-slate-700" : "justify-start from-green-700 to-green-400"
       }`}
     >
       <Thumb mode={mode} />
-      {mode === "home" && <FaAmazon className="absolute right-16 top-3 text-3xl"/>}
+      {mode === "home" && <FaAmazon className="absolute right-16 top-3 text-3xl" />}
       {mode === "green" && <Leaf />}
     </button>
   );
@@ -100,9 +99,7 @@ const Thumb = ({ mode }: { mode: "green" | "home" }) => {
   );
 };
 
-const SunCenter = () => (
-  <div className="absolute inset-1.5 rounded-full bg-amber-300" />
-);
+const SunCenter = () => <div className="absolute inset-1.5 rounded-full bg-amber-300" />;
 
 const MoonSpots = () => (
   <>
@@ -139,10 +136,10 @@ const Leaf = () => {
         }}
         className="text-slate-300 text-xs absolute right-10 top-2"
       >
-        <FaLeaf/>
+        <FaLeaf />
       </motion.span>
       <motion.span
-         animate={{ x: [-10, 0, 10, 20, 30], opacity: [0, 1, 0.75, 1, 0] }}
+        animate={{ x: [-10, 0, 10, 20, 30], opacity: [0, 1, 0.75, 1, 0] }}
         transition={{
           duration: 20,
           repeat: Infinity,
@@ -151,26 +148,21 @@ const Leaf = () => {
         style={{ rotate: "60deg" }}
         className="text-slate-300 text-lg absolute right-4 top-3"
       >
-        <FaLeaf/>
+        <FaLeaf />
       </motion.span>
       <motion.span
-       animate={{ x: [-20, -15, -10, -5, 0], opacity: [0, 1, 0.75, 1, 0] }}
+        animate={{ x: [-20, -15, -10, -5, 0], opacity: [0, 1, 0.75, 1, 0] }}
         transition={{
           duration: 10,
           repeat: Infinity,
           delay: 0.25,
         }}
-  
-        
         className="text-slate-300 absolute right-8 top-8 text-lg"
       >
-        <FaLeaf/>
+        <FaLeaf />
       </motion.span>
     </>
   );
 };
-
-
-
 
 export default ToggleWrapper;
