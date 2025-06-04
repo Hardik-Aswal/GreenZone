@@ -3,7 +3,6 @@
 import * as React from "react"
 import { useEffect, useCallback } from "react"
 
-import { Card, CardContent } from "@/components/ui/card"
 import {
   Carousel,
   CarouselContent,
@@ -13,32 +12,15 @@ import {
   type CarouselApi,
 } from "@/components/ui/carousel"
 import Image from "next/image"
+import { imageGreenArray, imageHomeArray } from "../data/imagedata"
+import { useAppSelector } from "../store/hooks"
+import { selectMode } from "../store/modeSlice"
 
 function CarouselDemo() {
-  const imageArray = [
-    {
-      src : "images/amazon1.jpg",
-      alt: "Amazon Image 1",
-    },
-    {
-      src : "images/amazon2.jpg",
-      alt: "Amazon Image 2",
-    },
-    {
-      src : "images/amazon3.png",
-      alt: "Amazon Image 3",
-    },
-    {
-      src : "images/amazon4.jpg",
-      alt: "Amazon Image 4",
-    },
-    {
-      src : "images/amazon5.jpg",
-      alt: "Amazon Image 5",
-    }
-  ]
+  const imageArray : any = imageHomeArray;
+  const greenArray = imageGreenArray;
   const [api, setApi] = React.useState<CarouselApi>()
-
+  const mode = useAppSelector(selectMode) as "green" | "home";
   const scrollNext = useCallback(() => {
     if (api) {
       api.scrollNext()
@@ -65,7 +47,9 @@ function CarouselDemo() {
       }}
     >
       <CarouselContent>
-        {imageArray.map((_, index) => (
+        {
+        mode == "home" ? 
+        imageArray.map((_:any, index:number) => (
           <CarouselItem key={index}>
             <div className="">
             
@@ -75,7 +59,16 @@ function CarouselDemo() {
    
             </div>
           </CarouselItem>
-        ))}
+        ))
+        :
+        greenArray.map((_:any, index:number) => (
+          <CarouselItem key={index}>
+            <div className="">
+            
+                  <Image  src={_.src} alt={_.alt} width={800} height={400} className="object-cover w-full h-[50vh] object-top"/>
+                  </div>
+          </CarouselItem>))
+      }
       </CarouselContent>
       <CarouselPrevious className="absolute left-4 top-1/2 -translate-y-1/2 z-10" />
       <CarouselNext className="absolute right-4 top-1/2 -translate-y-1/2 z-10" />

@@ -1,0 +1,13 @@
+{
+  "version": "7",
+  "dialect": "postgresql",
+  "entries": [
+    {
+      "idx": 0,
+      "version": "7",
+      "when": 1748957294478,
+      "tag": "0000_brainy_franklin_richards",
+      "breakpoints": true
+    }
+  ]
+}
