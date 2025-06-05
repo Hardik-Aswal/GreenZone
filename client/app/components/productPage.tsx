@@ -11,8 +11,8 @@ import { Separator } from "@/components/ui/separator";
 import { useAppDispatch, useAppSelector } from "../store/hooks";
 import { addToGroup, removeFromGroup } from "../store/groupOrderSlice";
 import type { ProductDetail } from "../types/product";
-import ProductReviews from "./productReview";
 import GroupOrderProgress from "./groupOrderProgress";
+import ProductReviews from "./productReview";
 
 interface ProductPageProps {
   product: ProductDetail;
@@ -46,7 +46,6 @@ export default function ProductPage({ product }: ProductPageProps) {
   return (
     <div className="max-w-7xl mx-auto px-4 py-6">
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
-        {/* Product Images */}
         <div className="lg:col-span-5">
           <div className="space-y-4">
             <div className="aspect-square bg-white rounded-lg border overflow-hidden">
@@ -80,11 +79,15 @@ export default function ProductPage({ product }: ProductPageProps) {
           </div>
         </div>
 
-        {/* Product Details */}
         <div className="lg:col-span-4">
           <div className="space-y-4">
             <div>
-              <Badge variant="secondary" className="mb-2">
+              {product.isBestseller && (
+                <Badge variant="secondary" className="mb-2 bg-yellow-500 text-white">
+                  BESTSELLER
+                </Badge>
+              )}
+              <Badge variant="outline" className="mb-2 ml-2">
                 {product.brand}
               </Badge>
               <h1 className="text-2xl font-bold text-gray-900">{product.title}</h1>
@@ -102,13 +105,11 @@ export default function ProductPage({ product }: ProductPageProps) {
 
             <div className="space-y-2">
               <div className="flex items-baseline space-x-2">
-                <span className="text-3xl font-bold text-red-600">₹{product.price.toLocaleString()}</span>
+                <span className="text-3xl font-bold text-red-600">${product.price.toFixed(2)}</span>
                 {product.originalPrice && (
                   <>
-                    <span className="text-lg text-gray-500 line-through">
-                      ₹{product.originalPrice.toLocaleString()}
-                    </span>
-                    <Badge variant="destructive">{product.discount}</Badge>
+                    <span className="text-lg text-gray-500 line-through">${product.originalPrice.toFixed(2)}</span>
+                    {product.discount && <Badge variant="destructive">{product.discount}</Badge>}
                   </>
                 )}
               </div>
@@ -148,11 +149,10 @@ export default function ProductPage({ product }: ProductPageProps) {
           </div>
         </div>
 
-        {/* Purchase Options */}
         <div className="lg:col-span-3">
           <Card className="sticky top-4">
-            <CardContent className="p-6 space-y-4">
-              <div className="text-2xl font-bold text-green-700">₹{product.price.toLocaleString()}</div>
+            <CardContent className="p-6 py-0 space-y-4">
+              <div className="text-2xl font-bold text-green-700">${product.price.toFixed(2)}</div>
 
               <div className="space-y-2">
                 <div className="flex items-center space-x-2 text-sm">
@@ -162,6 +162,12 @@ export default function ProductPage({ product }: ProductPageProps) {
                 <div className="text-sm">
                   <span className="font-medium">Sold by:</span> {product.seller}
                 </div>
+                <div className="text-sm">
+                  <span className="font-medium">Stock:</span>{" "}
+                  <span className={product.inStock ? "text-green-600" : "text-red-600"}>
+                    {product.inStock ? "In Stock" : "Out of Stock"}
+                  </span>
+                </div>
               </div>
 
               <div className="space-y-2">
@@ -170,6 +176,7 @@ export default function ProductPage({ product }: ProductPageProps) {
                   value={quantity}
                   onChange={(e) => setQuantity(Number(e.target.value))}
                   className="w-full p-2 border rounded-md"
+                  disabled={!product.inStock}
                 >
                   {[1, 2, 3, 4, 5].map((num) => (
                     <option key={num} value={num}>
@@ -180,15 +187,16 @@ export default function ProductPage({ product }: ProductPageProps) {
               </div>
 
               <div className="space-y-2">
-                <Button className="w-full bg-yellow-400 hover:bg-yellow-500 text-black font-medium">
+                <Button
+                  className="w-full bg-yellow-400 hover:bg-yellow-500 text-black font-medium"
+                  disabled={!product.inStock}
+                >
                   <ShoppingCart className="h-4 w-4 mr-2" />
                   Add to Cart
                 </Button>
 
-                {/* Group Order Progress */}
                 <GroupOrderProgress />
 
-                {/* Group Order Button */}
                 <Button
                   onClick={handleGroupOrder}
                   className={`w-full font-medium transition-all duration-200 ${
@@ -196,13 +204,14 @@ export default function ProductPage({ product }: ProductPageProps) {
                       ? "bg-green-800 hover:bg-green-900 text-white"
                       : "bg-green-700 hover:bg-green-800 text-white"
                   } ${isGroupComplete ? "ring-2 ring-green-300 ring-offset-2" : ""}`}
+                  disabled={!product.inStock}
                 >
                   <Users className="h-4 w-4 mr-2" />
                   {isInGroup ? "Remove from Group" : "Group By Order"}
                   {isGroupComplete && !isInGroup && " (Ready!)"}
                 </Button>
 
-                <Button variant="outline" className="w-full">
+                <Button variant="outline" className="w-full" disabled={!product.inStock}>
                   Buy Now
                 </Button>
               </div>
@@ -224,12 +233,17 @@ export default function ProductPage({ product }: ProductPageProps) {
                 <div>✓ Amazon delivered</div>
                 {isGroupComplete && <div className="text-green-600 font-medium">✓ Group order benefits unlocked!</div>}
               </div>
+
+              {product.isAvailableOnGreenovation && (
+                <Button variant="outline" className="w-full border-green-500 text-green-600 hover:bg-green-50">
+                  Available on Greenovation
+                </Button>
+              )}
             </CardContent>
           </Card>
         </div>
       </div>
 
-      {/* Product Information Tabs */}
       <div className="mt-12">
         <Tabs defaultValue="description" className="w-full">
           <TabsList className="grid w-full grid-cols-3">

@@ -1,6 +1,6 @@
 import { notFound } from "next/navigation";
-import ProductPage from "../components/productPage";
-import { productData } from "../data/productData";
+import ProductPage from "../../components/productPage";
+import { productData } from "../../data/productData";
 
 interface ProductPageProps {
   params: Promise<{ productId: string }>;
