@@ -47,7 +47,6 @@ const createProductDetail = (
     originalPrice?: number;
     discount?: string;
     isBestseller?: boolean;
-    isAvailableOnGreenovation?: boolean;
   } = {}
 ): ProductDetail => ({
   id,
@@ -70,7 +69,6 @@ const createProductDetail = (
   seller: `${brand} Official Store`,
   warranty: "1 Year Limited Warranty",
   isBestseller: options.isBestseller || false,
-  isAvailableOnGreenovation: options.isAvailableOnGreenovation || false,
 });
 export const productCategories: ProductCategory[] = [
   {
@@ -252,8 +250,7 @@ export const productCategories: ProductCategory[] = [
           "Thread Count": "200 TC",
           Care: "Machine washable",
           Size: "Standard",
-        },
-        { isAvailableOnGreenovation: true }
+        }
       ),
       createProductDetail(
         "figurines-vases",

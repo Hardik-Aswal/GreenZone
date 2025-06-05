@@ -18,7 +18,6 @@ export interface ProductDetail {
   };
   seller: string;
   warranty: string;
-  isAvailableOnGreenovation?: boolean;
   isBestseller?: boolean;
 }
 

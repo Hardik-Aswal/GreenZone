@@ -233,12 +233,6 @@ export default function ProductPage({ product }: ProductPageProps) {
                 <div>✓ Amazon delivered</div>
                 {isGroupComplete && <div className="text-green-600 font-medium">✓ Group order benefits unlocked!</div>}
               </div>
-
-              {product.isAvailableOnGreenovation && (
-                <Button variant="outline" className="w-full border-green-500 text-green-600 hover:bg-green-50">
-                  Available on Greenovation
-                </Button>
-              )}
             </CardContent>
           </Card>
         </div>

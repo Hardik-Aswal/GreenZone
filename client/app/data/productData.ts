@@ -37,7 +37,6 @@ export const products: ProductDetail[] = [
     },
     seller: "EcoStraws Official Store",
     warranty: "No warranty",
-    isAvailableOnGreenovation: true,
     isBestseller: false,
   },
   {
@@ -81,7 +80,6 @@ export const products: ProductDetail[] = [
     seller: "Kenwood Official Store",
     warranty: "2 Years Comprehensive Warranty",
     isBestseller: true,
-    isAvailableOnGreenovation: false,
   },
   {
     id: "apple-ipad-pro-12-9",
@@ -127,7 +125,6 @@ export const products: ProductDetail[] = [
     seller: "Apple Official Store",
     warranty: "1 Year Limited Warranty",
     isBestseller: true,
-    isAvailableOnGreenovation: false,
   },
   {
     id: "amazon-echo-3rd-gen",
@@ -167,7 +164,6 @@ export const products: ProductDetail[] = [
     seller: "Amazon Official Store",
     warranty: "1 Year Limited Warranty",
     isBestseller: true,
-    isAvailableOnGreenovation: false,
   },
   {
     id: "woven-bag-leather-tote",
@@ -206,7 +202,6 @@ export const products: ProductDetail[] = [
     },
     seller: "HandiCraft Boutique",
     warranty: "6 Months Manufacturing Warranty",
-    isAvailableOnGreenovation: true,
     isBestseller: false,
   },
   {
@@ -251,7 +246,6 @@ export const products: ProductDetail[] = [
     seller: "Samsung Official Store",
     warranty: "3 Years Comprehensive Warranty",
     isBestseller: true,
-    isAvailableOnGreenovation: false,
   },
   {
     id: "logitech-mx-master-3",
@@ -292,7 +286,6 @@ export const products: ProductDetail[] = [
     seller: "Logitech Official Store",
     warranty: "1 Year Limited Hardware Warranty",
     isBestseller: false,
-    isAvailableOnGreenovation: false,
   },
   {
     id: "instant-pot-duo-7-in-1",
@@ -336,7 +329,6 @@ export const products: ProductDetail[] = [
     seller: "Instant Pot Official Store",
     warranty: "1 Year Limited Warranty",
     isBestseller: true,
-    isAvailableOnGreenovation: false,
   },
 ];
 

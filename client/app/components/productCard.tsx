@@ -33,12 +33,6 @@ export default function ProductCard({ product }: ProductCardProps) {
     console.log("Added to cart:", product.title);
   };
 
-  const handleGreenovation = (e: React.MouseEvent) => {
-    e.preventDefault();
-    e.stopPropagation();
-    console.log("Available on Greenovation:", product.title);
-  };
-
   return (
     <Card
       className={`h-full transition-all duration-200 cursor-pointer ${
@@ -90,15 +84,6 @@ export default function ProductCard({ product }: ProductCardProps) {
               <ShoppingCart className="h-4 w-4 mr-2" />
               Add to Cart
             </Button>
-            {product.isAvailableOnGreenovation && (
-              <Button
-                onClick={handleGreenovation}
-                variant="outline"
-                className="w-full border-green-500 text-green-600 hover:bg-green-50"
-              >
-                Available on Greenovation
-              </Button>
-            )}
           </div>
         </CardContent>
       </Link>
