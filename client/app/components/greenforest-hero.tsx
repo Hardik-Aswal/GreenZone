@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Trophy, Leaf, Share2, Users, MapPin, BarChart3, Camera } from 'lucide-react';
+import { useRouter } from 'next/navigation';
 
 interface Feature {
   icon: React.ReactNode;
@@ -11,6 +12,7 @@ interface Feature {
 const GreenForestHero: React.FC = () => {
   const [activeFeature, setActiveFeature] = useState(0);
   const [animationClass, setAnimationClass] = useState('');
+  const router = useRouter();
 
   const features: Feature[] = [
     {
@@ -175,7 +177,9 @@ const GreenForestHero: React.FC = () => {
             <div className="bg-gradient-to-r from-green-500 via-emerald-600 to-teal-600 rounded-3xl p-8 text-white shadow-2xl">
               <h3 className="text-2xl font-bold mb-4">Ready to Start Planting? 🌱</h3>
               <p className="mb-6 text-green-50">Join thousands of eco-warriors making a real difference with every purchase.</p>
-              <button className="bg-white cursor-pointer text-green-600 px-8 py-4 rounded-2xl font-bold text-lg hover:bg-green-50 transition-colors duration-200 shadow-lg">
+              <button
+                onClick={() => router.push('/dashboard')}
+              className="bg-white cursor-pointer text-green-600 px-8 py-4 rounded-2xl font-bold text-lg hover:bg-green-50 transition-colors duration-200 shadow-lg">
                 Start Your Green Journey
               </button>
             </div>

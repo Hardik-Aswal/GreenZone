@@ -2,8 +2,9 @@ import Image from "next/image"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
 import { Leaf, Gift, Award, ArrowRight } from "lucide-react"
-
+import { useRouter } from "next/navigation"
 export default function SaplingHero() {
+  const router = useRouter()
   return (
     <section className="relative overflow-hidden bg-gradient-to-br from-green-50 via-emerald-50 to-teal-50 py-16 md:py-24 lg:py-32">
 
@@ -60,7 +61,9 @@ export default function SaplingHero() {
 
      
             <div className="flex flex-col sm:flex-row gap-4">
-              <Button size="lg" className="bg-green-600 hover:bg-green-700 text-white">
+              <Button size="lg" className="bg-green-600 hover:bg-green-700 text-white"
+              onClick={()=> router.push('/dashboard')}
+              >
                 Start Earning Saplings
                 <ArrowRight className="ml-2 h-4 w-4" />
               </Button>

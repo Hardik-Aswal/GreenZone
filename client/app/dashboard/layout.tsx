@@ -18,6 +18,7 @@ import { log } from 'console';
 import { FaHistory, FaLeaf, FaLessThan, FaTree } from 'react-icons/fa';
 import { HiSpeakerphone } from 'react-icons/hi';
 import { LucideBadgePercent } from 'lucide-react';
+import Image from 'next/image';
 
 export default function Example({ children }: { children: React.ReactNode }) {
   return (
@@ -263,8 +264,16 @@ const SaplingCount = ()=>{
     const saplings = 100;
 
     return (
-        <div>
-            {saplings}
-        </div>
+<div className="fixed z-50 top-36 right-4 bg-green-50 text-green-900 px-5 py-1 rounded-2xl shadow-xl flex items-center gap-3 border border-green-200 backdrop-blur-sm">
+  <Image
+    src="/images/icon.png"
+    alt="Sapling Icon"
+    width={40}
+    height={40}
+    className="inline-block"
+  />
+  <span className="text-lg font-semibold">{saplings}</span>
+</div>
+
     )
 }
