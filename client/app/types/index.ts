@@ -1,3 +1,4 @@
+import { ProductDetail, Review } from "./product";
 export interface NavItem {
   id: string;
   label: string;
@@ -17,7 +18,7 @@ export interface ProductCategory {
   id: string;
   title: string;
   subtitle?: string;
-  products: Product[];
+  products: ProductDetail[];
   ctaText?: string;
   ctaLink?: string;
 }

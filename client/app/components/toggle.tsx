@@ -9,13 +9,17 @@ import { change, selectMode } from "../store/modeSlice";
 
 const ToggleWrapper = () => {
   const mode = useAppSelector(selectMode) as "green" | "home";
-  const [showTooltip, setShowTooltip] = useState(true);
+  const [showTooltip, setShowTooltip] = useState<boolean>(() => {
+    if (typeof window === "undefined") return false;
+    return localStorage.getItem("greenzoneTooltipSeen") !== "true";
+  });
   const dispatch = useAppDispatch();
   const router = useRouter();
   const pathname = usePathname();
   const handleCheckItOut = () => {
     setShowTooltip(false);
-
+    localStorage.setItem("greenzoneTooltipSeen", "true");
+    dispatch(change());
     console.log("Greenzone feature clicked!");
   };
 

@@ -18,6 +18,7 @@ export interface ProductDetail {
   };
   seller: string;
   warranty: string;
+  isBestseller?: boolean;
 }
 
 export interface Review {
@@ -30,3 +31,4 @@ export interface Review {
   verified: boolean;
   helpful: number;
 }
+export type Product = ProductDetail;
