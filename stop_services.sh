@@ -92,12 +92,10 @@ stop_service "ml" 8000
 echo "=== Stopping server service ==="
 stop_service "server" 4000
 
-echo "=== Stopping client service ==="
-stop_service "client" 3000
 
 # Final cleanup for stubborn processes
 echo "=== Final cleanup for any remaining processes ==="
-kill_process_by_port 3000 "Next.js client"
+
 kill_process_by_port 4000 "Server"
 kill_process_by_port 8000 "ML service"
 
