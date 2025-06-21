@@ -1,0 +1,193 @@
+name: Deploy Merge-Conflict to EC2 (Development)
+
+on:
+  push:
+    branches:
+      - main
+      - master
+  workflow_dispatch:  # Allow manual triggering
+
+jobs:
+  package:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+        
+      - name: Create environment files
+        run: |
+          # Server .env file
+          echo "${{ secrets.SERVER_ENV }}" > ./server/.env
+          
+          # Client .env file
+          echo "${{ secrets.CLIENT_ENV }}" > ./client/.env
+          
+      - name: Ensure scripts are executable
+        run: chmod +x launch_services.sh stop_services.sh
+        
+      - name: Package application
+        run: tar --exclude=.git -czf merge-conflict.tar.gz .
+        
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: merge-conflict-package
+          path: merge-conflict.tar.gz
+          
+  deploy:
+    needs: package
+    runs-on: ubuntu-latest
+    steps:
+      - name: Download artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: merge-conflict-package
+          
+      - name: Copy package to EC2
+        uses: appleboy/scp-action@master
+        with:
+          host: ${{ secrets.EC2_HOST }}
+          username: ubuntu
+          key: ${{ secrets.EC2_SSH_KEY }}
+          source: "merge-conflict.tar.gz"
+          target: "/home/ubuntu/"
+          
+      - name: Deploy application
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.EC2_HOST }}
+          username: ubuntu
+          key: ${{ secrets.EC2_SSH_KEY }}
+          script: |
+            # Stop existing services
+            if [ -f "/home/ubuntu/merge-conflict/stop_services.sh" ]; then
+              cd /home/ubuntu/merge-conflict
+              ./stop_services.sh
+            fi
+            
+            # Clean up old deployment
+            rm -rf /home/ubuntu/merge-conflict
+            mkdir -p /home/ubuntu/merge-conflict
+            
+            # Extract new deployment
+            tar -xzf /home/ubuntu/merge-conflict.tar.gz -C /home/ubuntu/merge-conflict
+            cd /home/ubuntu/merge-conflict
+            rm /home/ubuntu/merge-conflict.tar.gz
+            
+            # Ensure scripts are executable
+            chmod +x launch_services.sh stop_services.sh
+            
+            # Install dependencies
+            echo "Installing dependencies..."
+            
+            # ML service
+            cd /home/ubuntu/merge-conflict/ml
+            python3 -m venv venv
+            source venv/bin/activate
+            pip install -r requirements.txt
+            deactivate
+            
+            # Server service
+            cd /home/ubuntu/merge-conflict/server
+            npm install
+            
+            # Client service
+            cd /home/ubuntu/merge-conflict/client
+            npm install
+            
+            # Return to project root
+            cd /home/ubuntu/merge-conflict
+            
+            # Create PM2 ecosystem file for development
+            cat > ecosystem.config.js << 'EOF'
+            module.exports = {
+              apps: [
+                {
+                  name: "ml-service",
+                  cwd: "./ml",
+                  script: "./venv/bin/python",
+                  args: "-m uvicorn main:app --host 0.0.0.0 --port 8000 --reload",
+                  watch: ["./"],
+                  env: {
+                    NODE_ENV: "development"
+                  }
+                },
+                {
+                  name: "server-service",
+                  cwd: "./server",
+                  script: "npm",
+                  args: "run dev",
+                  watch: ["./"],
+                  env: {
+                    NODE_ENV: "development"
+                  }
+                },
+                {
+                  name: "client-service",
+                  cwd: "./client",
+                  script: "npm",
+                  args: "run dev",
+                  watch: ["./"],
+                  env: {
+                    NODE_ENV: "development"
+                  }
+                }
+              ]
+            };
+            EOF
+            
+            # Check for PM2 and install if not present
+            if ! command -v pm2 &> /dev/null; then
+              echo "Installing PM2..."
+              npm install -g pm2
+            fi
+            
+            # Start services using PM2 in development mode
+            echo "Starting services with PM2 in development mode..."
+            pm2 delete all || true
+            pm2 start ecosystem.config.js
+            pm2 save
+            
+            echo "Deployment completed successfully! Development servers are running."
+
+      - name: Verify services
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.EC2_HOST }}
+          username: ubuntu
+          key: ${{ secrets.EC2_SSH_KEY }}
+          script: |
+            echo "Verifying services..."
+            sleep 20  # Wait longer for dev servers to fully start
+            
+            # Check if ML service is running
+            echo "Checking ML service..."
+            if curl -s http://localhost:8000/docs > /dev/null; then
+              echo "✅ ML service is running"
+            else
+              echo "❌ ML service is not responding"
+            fi
+            
+            # Check if server is running
+            echo "Checking server service..."
+            if curl -s http://localhost:4000 > /dev/null; then
+              echo "✅ Server is running"
+            else
+              echo "❌ Server is not responding"
+            fi
+            
+            # Check if client is running
+            echo "Checking client service..."
+            if curl -s http://localhost:3000 > /dev/null; then
+              echo "✅ Client is running"
+            else
+              echo "❌ Client is not responding"
+            fi
+            
+            # Show running processes
+            echo "Currently running services:"
+            pm2 list
+            
+            # Display logs
+            echo "Recent logs from services:"
+            pm2 logs --lines 10
