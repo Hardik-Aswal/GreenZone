@@ -26,7 +26,11 @@ jobs:
         run: chmod +x launch_services.sh stop_services.sh
         
       - name: Package application
-        run: tar --exclude=.git --warning=no-file-changed -czf merge-conflict.tar.gz .
+        run: |
+          mkdir temp-archive
+          rsync -a --exclude=".git" ./ temp-archive/
+          tar -czf merge-conflict.tar.gz -C temp-archive .
+
         
       - name: Upload artifact
         uses: actions/upload-artifact@v4
