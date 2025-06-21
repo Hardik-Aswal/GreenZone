@@ -103,54 +103,6 @@ jobs:
             # Return to project root
             cd /home/ubuntu/merge-conflict
             
-            # Create PM2 ecosystem file for development
-            cat > ecosystem.config.js << 'EOF'
-            module.exports = {
-              apps: [
-                {
-                  name: "ml-service",
-                  cwd: "./ml",
-                  script: "./venv/bin/python",
-                  args: "-m uvicorn main:app --host 0.0.0.0 --port 8000 --reload",
-                  watch: ["./"],
-                  env: {
-                    NODE_ENV: "development"
-                  }
-                },
-                {
-                  name: "server-service",
-                  cwd: "./server",
-                  script: "npm",
-                  args: "run dev",
-                  watch: ["./"],
-                  env: {
-                    NODE_ENV: "development"
-                  }
-                },
-                {
-                  name: "client-service",
-                  cwd: "./client",
-                  script: "npm",
-                  args: "run dev",
-                  watch: ["./"],
-                  env: {
-                    NODE_ENV: "development"
-                  }
-                }
-              ]
-            };
-            EOF
-            
-            # Check for PM2 and install if not present
-            if ! command -v pm2 &> /dev/null; then
-              echo "Installing PM2..."
-              npm install -g pm2
-            fi
-            
-            # Start services using PM2 in development mode
-            echo "Starting services with PM2 in development mode..."
-            pm2 delete all || true
-            pm2 start ecosystem.config.js
-            pm2 save
-            
+            ./launch_services.sh
+
             echo "Deployment completed successfully! Development servers are running."
