@@ -16,7 +16,13 @@ export const products = pgTable("products", {
   images: text("images").array().notNull().default([]),
   features: text("features").array().notNull().default([]),
   specifications: json("specifications").notNull(),
-  category: text("category"),
+  category1: text("category1").notNull(),
+  category2: text("category2").notNull(),
+  sector: text("sector").notNull(),
+
+  material1: text("material1").notNull(),
+  material2: text("material2").notNull(),
+  weight: numeric("weight", { precision: 10, scale: 2 }).notNull(),
 
   inStock: integer("in_stock").notNull().default(0),
 
