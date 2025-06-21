@@ -19,8 +19,7 @@ jobs:
           # Server .env file
           echo "${{ secrets.SERVER_ENV }}" > ./server/.env
           
-          # Client .env file
-          echo "${{ secrets.CLIENT_ENV }}" > ./client/.env
+    
           
       - name: Ensure scripts are executable
         run: chmod +x launch_services.sh stop_services.sh
@@ -96,9 +95,7 @@ jobs:
             npm install
             
             # Client service
-            cd /home/ubuntu/merge-conflict/client
-            npm install
-            npm run Build
+            rm -rf /home/ubuntu/merge-conflict/client
             
             # Return to project root
             cd /home/ubuntu/merge-conflict

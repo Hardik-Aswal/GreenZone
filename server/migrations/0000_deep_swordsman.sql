@@ -1,3 +1,4 @@
+DROP TYPE IF EXISTS "public"."role";
 CREATE TYPE "public"."role" AS ENUM('customer', 'admin');--> statement-breakpoint
 CREATE TABLE "users" (
 	"id" uuid PRIMARY KEY DEFAULT gen_random_uuid() NOT NULL,
@@ -18,21 +19,39 @@ CREATE TABLE "packaging_types" (
 --> statement-breakpoint
 CREATE TABLE "products" (
 	"id" uuid PRIMARY KEY DEFAULT gen_random_uuid() NOT NULL,
-	"name" text NOT NULL,
-	"description" text,
-	"price" numeric(10, 2) NOT NULL,
-	"image_url" text,
+	"title" text NOT NULL,
 	"brand" text,
+	"original_price" numeric(10, 2) NOT NULL,
+	"discount" numeric(5, 2) DEFAULT '0' NOT NULL,
+	"description" text,
+	"images" text[] DEFAULT '{}' NOT NULL,
+	"features" text[] DEFAULT '{}' NOT NULL,
+	"specifications" json NOT NULL,
 	"category" text,
 	"in_stock" integer DEFAULT 0 NOT NULL,
 	"carbon_impact" numeric(10, 2) NOT NULL,
 	"packaging_type_id" uuid NOT NULL,
 	"eco_tags" text[] NOT NULL,
 	"supports_eco_packaging" boolean DEFAULT false NOT NULL,
+	"delivery_type" text[] NOT NULL,
 	"created_at" timestamp with time zone DEFAULT now(),
 	"updated_at" timestamp with time zone DEFAULT now(),
 	"seller_id" uuid NOT NULL
 );
 --> statement-breakpoint
+CREATE TABLE "reviews" (
+	"id" uuid PRIMARY KEY DEFAULT gen_random_uuid() NOT NULL,
+	"user_id" uuid NOT NULL,
+	"product_id" uuid NOT NULL,
+	"rating" integer NOT NULL,
+	"title" text NOT NULL,
+	"content" text NOT NULL,
+	"date" timestamp with time zone NOT NULL,
+	"verified" boolean DEFAULT false NOT NULL,
+	"helpful" integer DEFAULT 0 NOT NULL
+);
+--> statement-breakpoint
 ALTER TABLE "products" ADD CONSTRAINT "products_packaging_type_id_packaging_types_id_fk" FOREIGN KEY ("packaging_type_id") REFERENCES "public"."packaging_types"("id") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
-ALTER TABLE "products" ADD CONSTRAINT "products_seller_id_users_id_fk" FOREIGN KEY ("seller_id") REFERENCES "public"."users"("id") ON DELETE cascade ON UPDATE no action;
+ALTER TABLE "products" ADD CONSTRAINT "products_seller_id_users_id_fk" FOREIGN KEY ("seller_id") REFERENCES "public"."users"("id") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
+ALTER TABLE "reviews" ADD CONSTRAINT "reviews_user_id_users_id_fk" FOREIGN KEY ("user_id") REFERENCES "public"."users"("id") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
+ALTER TABLE "reviews" ADD CONSTRAINT "reviews_product_id_products_id_fk" FOREIGN KEY ("product_id") REFERENCES "public"."products"("id") ON DELETE cascade ON UPDATE no action;
