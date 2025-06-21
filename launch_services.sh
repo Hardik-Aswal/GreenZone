@@ -9,7 +9,7 @@ echo "Starting all services..."
 
 # Start ML service in background
 cd ./ml
-nohup python -m uvicorn main:app --host 0.0.0.0 --port 8000 > "$BASE_DIR/logs/ml_service.log" 2>&1 &
+nohup python3 -m uvicorn main:app --host 0.0.0.0 --port 8000 > "$BASE_DIR/logs/ml_service.log" 2>&1 &
 ML_PID=$!
 echo "ML service started with PID: $ML_PID"
 
