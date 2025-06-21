@@ -98,6 +98,7 @@ jobs:
             # Client service
             cd /home/ubuntu/merge-conflict/client
             npm install
+            npm run Build
             
             # Return to project root
             cd /home/ubuntu/merge-conflict
@@ -153,45 +154,3 @@ jobs:
             pm2 save
             
             echo "Deployment completed successfully! Development servers are running."
-
-      - name: Verify services
-        uses: appleboy/ssh-action@master
-        with:
-          host: ${{ secrets.EC2_HOST }}
-          username: ubuntu
-          key: ${{ secrets.EC2_SSH_KEY }}
-          script: |
-            echo "Verifying services..."
-            sleep 20  # Wait longer for dev servers to fully start
-            
-            # Check if ML service is running
-            echo "Checking ML service..."
-            if curl -s http://localhost:8000/docs > /dev/null; then
-              echo "✅ ML service is running"
-            else
-              echo "❌ ML service is not responding"
-            fi
-            
-            # Check if server is running
-            echo "Checking server service..."
-            if curl -s http://localhost:4000 > /dev/null; then
-              echo "✅ Server is running"
-            else
-              echo "❌ Server is not responding"
-            fi
-            
-            # Check if client is running
-            echo "Checking client service..."
-            if curl -s http://localhost:3000 > /dev/null; then
-              echo "✅ Client is running"
-            else
-              echo "❌ Client is not responding"
-            fi
-            
-            # Show running processes
-            echo "Currently running services:"
-            pm2 list
-            
-            # Display logs
-            echo "Recent logs from services:"
-            pm2 logs --lines 10

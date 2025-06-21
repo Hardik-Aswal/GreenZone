@@ -27,7 +27,7 @@ cd "$BASE_DIR"
 
 # Start client service in background
 cd ./client
-nohup npm run dev > "$BASE_DIR/logs/client_service.log" 2>&1 &
+nohup npm run start > "$BASE_DIR/logs/client_service.log" 2>&1 &
 CLIENT_PID=$!
 echo "Client service started with PID: $CLIENT_PID"
 
