@@ -49,7 +49,7 @@ export async function loginUser(req: Request){
 
     const payload = {
         id: user.id,
-        role: user.role,
+        role: user.role as "admin" | "customer",
         email: user.email
     }
 

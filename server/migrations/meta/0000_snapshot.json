@@ -1,5 +1,5 @@
 {
-  "id": "c66ffe82-bae8-437b-ae0b-7720e6191f06",
+  "id": "158f3ffc-d237-47d9-b6f9-c8d0153b2ee1",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "version": "7",
   "dialect": "postgresql",
@@ -35,8 +35,7 @@
         },
         "role": {
           "name": "role",
-          "type": "role",
-          "typeSchema": "public",
+          "type": "text",
           "primaryKey": false,
           "notNull": true,
           "default": "'customer'"
@@ -166,11 +165,41 @@
           "primaryKey": false,
           "notNull": true
         },
-        "category": {
-          "name": "category",
+        "category1": {
+          "name": "category1",
           "type": "text",
           "primaryKey": false,
-          "notNull": false
+          "notNull": true
+        },
+        "category2": {
+          "name": "category2",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "sector": {
+          "name": "sector",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "material1": {
+          "name": "material1",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "material2": {
+          "name": "material2",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "weight": {
+          "name": "weight",
+          "type": "numeric(10, 2)",
+          "primaryKey": false,
+          "notNull": true
         },
         "in_stock": {
           "name": "in_stock",
@@ -364,16 +393,7 @@
       "isRLSEnabled": false
     }
   },
-  "enums": {
-    "public.role": {
-      "name": "role",
-      "schema": "public",
-      "values": [
-        "customer",
-        "admin"
-      ]
-    }
-  },
+  "enums": {},
   "schemas": {},
   "sequences": {},
   "roles": {},

@@ -5,7 +5,7 @@ import { db } from "./drizzle";
 import { packagingTypes } from "./schemas/packagingTypes";
 import { products } from "./schemas/product";
 
-const sellerId = "41003289-1e5c-4efc-9e43-24a03999ba89";
+const sellerId = "2eb5df87-37ba-4f4f-8169-7585061826f6";
 
 async function seed() {
   // 1) seed packaging types
