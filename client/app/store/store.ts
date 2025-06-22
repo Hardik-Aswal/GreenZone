@@ -4,6 +4,7 @@ import storage from "redux-persist/lib/storage";
 import modeReducer from "./modeSlice";
 import groupOrderReducer from "./groupOrderSlice";
 import cartReducer from "./cartSlice";
+import userReducer from "./userSlice";
 
 const persistConfig = {
   key: "root",
@@ -14,6 +15,7 @@ const rootReducer = combineReducers({
   mode: modeReducer,
   groupOrder: groupOrderReducer,
   cart: cartReducer,
+  user : userReducer
 });
 
 const persistedReducer = persistReducer(persistConfig, rootReducer);
