@@ -24,7 +24,7 @@ interface SaplingData {
   saplings: number;
 }
 
-const UserDashboard: React.FC = () => {
+const UserDashboard = () => {
   const [timeFilter, setTimeFilter] = useState<'1day' | '1week' | '1month'>('1week');
   const [chartsAnimated, setChartsAnimated] = useState(false);
   const [currentUser] = useState({
