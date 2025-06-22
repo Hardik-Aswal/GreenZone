@@ -93,6 +93,7 @@ export default function ProductCard({ product }: ProductCardProps) {
               </>
             )}
           </div>
+          <p className="text-sm text-green-700 mb-2">Carbon impact: {product.carbonImpact.toFixed(1)} kg CO₂e</p>
 
           <div className="flex items-center mb-4">
             <div className="flex mr-1">{renderStars(product.rating ?? 0)}</div>

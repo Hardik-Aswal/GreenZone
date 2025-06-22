@@ -183,7 +183,7 @@ export default function ProductPage({ product }: ProductPageProps) {
           <Card className="sticky top-4">
             <CardContent className="p-6 py-0 space-y-4">
               <div className="text-2xl font-bold text-green-700">₹{formatIndianNumber(product.price.toFixed(2))}</div>
-
+              <p className="text-sm text-green-700">Carbon impact: {product.carbonImpact.toFixed(1)} kg CO₂e</p>
               <div className="space-y-2">
                 <div className="flex items-center space-x-2 text-sm">
                   <Truck className="h-4 w-4 text-green-600" />

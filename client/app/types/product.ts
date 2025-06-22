@@ -19,6 +19,7 @@ export interface ProductDetail {
   seller: string;
   warranty: string;
   isBestseller?: boolean;
+  carbonImpact: number;
 }
 
 export interface Review {
