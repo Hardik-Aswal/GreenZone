@@ -6,7 +6,7 @@ export const products: ProductDetail[] = [
     title:
       "Disposable Plastic Drinking Straws - a pack of 100 clear, BPA-free straws designed for convenience and reliability, 7.75-inch",
     brand: "EcoStraws",
-    price: 7.5,
+    price: 7.5 * 80,
     rating: 3,
     reviewCount: 1245,
     images: [
@@ -44,7 +44,7 @@ export const products: ProductDetail[] = [
     title:
       "Kenwood kMix Stand Mixer for Baking, Stylish Kitchen Mixer with K-beater, Dough Hook and Whisk, 5 Litre Glass Bowl",
     brand: "Kenwood",
-    price: 239,
+    price: 239 * 80,
     rating: 4.5,
     reviewCount: 2890,
     images: [
@@ -85,7 +85,7 @@ export const products: ProductDetail[] = [
     id: "apple-ipad-pro-12-9",
     title: "New Apple iPad Pro (12.9-inch, Wi-Fi, 128GB) - Silver (4th Generation)",
     brand: "Apple",
-    price: 598.99,
+    price: 598.99 * 80,
     originalPrice: 699.99,
     discount: "14% off",
     rating: 4,
@@ -130,7 +130,7 @@ export const products: ProductDetail[] = [
     id: "amazon-echo-3rd-gen",
     title: "Amazon Echo (3rd generation) | Smart speaker with Alexa, Charcoal Fabric",
     brand: "Amazon",
-    price: 98.99,
+    price: 98.99 * 80,
     rating: 5,
     reviewCount: 7891,
     images: [
@@ -170,7 +170,7 @@ export const products: ProductDetail[] = [
     title:
       "Woven Bag for Women, Leather Tote Bag Large Summer Beach Travel Handbag and Purse Retro Handmade Shoulder Bag",
     brand: "HandiCraft",
-    price: 19.99,
+    price: 19.99 * 80,
     rating: 4.5,
     reviewCount: 1203,
     images: [
@@ -208,7 +208,7 @@ export const products: ProductDetail[] = [
     id: "samsung-curved-gaming-monitor",
     title: "Samsung LC49RG90SSUXEN 49' Curved LED Gaming Monitor - Super Ultra Wide Dual WQHD 5120 x 1440",
     brand: "Samsung",
-    price: 1094.98,
+    price: 1094.98 * 80,
     rating: 4.8,
     reviewCount: 1852,
     images: [
@@ -251,7 +251,7 @@ export const products: ProductDetail[] = [
     id: "logitech-mx-master-3",
     title: "Logitech MX Master 3 Advanced Wireless Mouse - Graphite",
     brand: "Logitech",
-    price: 99.99,
+    price: 99.99 * 80,
     rating: 4.7,
     reviewCount: 3456,
     images: [
@@ -291,7 +291,7 @@ export const products: ProductDetail[] = [
     id: "instant-pot-duo-7-in-1",
     title: "Instant Pot Duo 7-in-1 Electric Pressure Cooker, 6 Quart, Stainless Steel",
     brand: "Instant Pot",
-    price: 89.99,
+    price: 89.99 * 80,
     originalPrice: 119.99,
     discount: "25% off",
     rating: 4.6,

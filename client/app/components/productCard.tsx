@@ -5,11 +5,13 @@ import type React from "react";
 import { useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
-import { Star, ShoppingCart } from "lucide-react";
+import { Star, ShoppingCart, Check } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent } from "@/components/ui/card";
 import type { ProductDetail } from "../types/product";
+import { useAppDispatch, useAppSelector } from "../store/hooks";
+import { addItem } from "../store/cartSlice";
 
 interface ProductCardProps {
   product: ProductDetail;
@@ -17,6 +19,12 @@ interface ProductCardProps {
 
 export default function ProductCard({ product }: ProductCardProps) {
   const [isHovered, setIsHovered] = useState(false);
+  const [isAdding, setIsAdding] = useState(false);
+  const [justAdded, setJustAdded] = useState(false);
+
+  const dispatch = useAppDispatch();
+  const cartItems = useAppSelector((s) => s.cart.items);
+  const isInCart = cartItems.some((i) => i.id === product.id);
 
   const renderStars = (rating: number) => {
     return Array.from({ length: 5 }, (_, i) => (
@@ -26,11 +34,28 @@ export default function ProductCard({ product }: ProductCardProps) {
       />
     ));
   };
+  function formatIndianNumber(price: string): string {
+    const [intPart, decPart] = price.split(".");
+    let lastThree = intPart.slice(-3);
+    let otherNumbers = intPart.slice(0, -3);
 
-  const handleAddToCart = (e: React.MouseEvent) => {
+    if (otherNumbers !== "") {
+      lastThree = "," + lastThree;
+      otherNumbers = otherNumbers.replace(/\B(?=(\d{2})+(?!\d))/g, ",");
+    }
+
+    const formatted = otherNumbers + lastThree;
+    return decPart != null ? `${formatted}.${decPart}` : formatted;
+  }
+  const handleAddToCart = async (e: React.MouseEvent) => {
     e.preventDefault();
     e.stopPropagation();
-    console.log("Added to cart:", product.title);
+    if (isInCart || !product.inStock) return;
+    setIsAdding(true);
+    dispatch(addItem(product));
+    setJustAdded(true);
+    setTimeout(() => setJustAdded(false), 1500);
+    setIsAdding(false);
   };
 
   return (
@@ -54,11 +79,18 @@ export default function ProductCard({ product }: ProductCardProps) {
           </div>
 
           <div className="mb-2 flex items-center">
-            <span className="text-lg font-bold">${product.price?.toFixed(2) ?? "0.00"}</span>
-            {product.originalPrice != null && (
-              <span className="ml-2 text-sm text-gray-500 line-through">
-                ${product.originalPrice?.toFixed(2) ?? "0.00"}
-              </span>
+            <span className="text-lg font-bold">₹{formatIndianNumber(product.price.toFixed(2)) ?? "0.00"}</span>
+            {product.price != null && (
+              <>
+                <span className="ml-2 text-sm text-gray-500 line-through">
+                  ₹{formatIndianNumber(product.price.toFixed(2)) ?? "0.00"}
+                </span>
+                {/* {product.discount && (
+                  <Badge variant="destructive" className="ml-2 text-xs">
+                    {product.discount}
+                  </Badge>
+                )} */}
+              </>
             )}
           </div>
 
@@ -80,9 +112,37 @@ export default function ProductCard({ product }: ProductCardProps) {
           </div>
 
           <div className="mt-auto space-y-2">
-            <Button onClick={handleAddToCart} className="w-full bg-yellow-400 hover:bg-yellow-500 text-black">
-              <ShoppingCart className="h-4 w-4 mr-2" />
-              Add to Cart
+            <Button
+              onClick={handleAddToCart}
+              disabled={isAdding || isInCart || !product.inStock}
+              className={`w-full transition-all duration-200 ${
+                justAdded
+                  ? "bg-green-500 hover:bg-green-600 text-white"
+                  : isInCart
+                  ? "bg-gray-400 text-gray-600 cursor-not-allowed"
+                  : "bg-yellow-400 hover:bg-yellow-500 text-black"
+              }`}
+            >
+              {isAdding ? (
+                <>
+                  <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-black mr-2"></div>
+                  Adding...
+                </>
+              ) : justAdded ? (
+                <>
+                  <Check className="h-4 w-4 mr-2" />
+                  Added to Cart
+                </>
+              ) : isInCart ? (
+                "In Cart"
+              ) : !product.inStock ? (
+                "Out of Stock"
+              ) : (
+                <>
+                  <ShoppingCart className="h-4 w-4 mr-2" />
+                  Add to Cart
+                </>
+              )}
             </Button>
           </div>
         </CardContent>

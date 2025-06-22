@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import Image from "next/image";
-import { Star, Heart, Share2, ShoppingCart, Truck, Shield, Award, Users } from "lucide-react";
+import { Star, Heart, Share2, ShoppingCart, Truck, Shield, Award, Users, Check } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent } from "@/components/ui/card";
@@ -13,6 +13,7 @@ import { addToGroup, removeFromGroup } from "../store/groupOrderSlice";
 import type { ProductDetail } from "../types/product";
 import GroupOrderProgress from "./groupOrderProgress";
 import ProductReviews from "./productReview";
+import { addItem } from "../store/cartSlice";
 
 interface ProductPageProps {
   product: ProductDetail;
@@ -26,6 +27,30 @@ export default function ProductPage({ product }: ProductPageProps) {
   const { groupedOrders, isGroupComplete } = useAppSelector((state) => state.groupOrder);
   const isInGroup = groupedOrders.includes(product.id);
 
+  function formatIndianNumber(price: string): string {
+    const [intPart, decPart] = price.split(".");
+    let lastThree = intPart.slice(-3);
+    let otherNumbers = intPart.slice(0, -3);
+
+    if (otherNumbers !== "") {
+      lastThree = "," + lastThree;
+      otherNumbers = otherNumbers.replace(/\B(?=(\d{2})+(?!\d))/g, ",");
+    }
+
+    const formatted = otherNumbers + lastThree;
+    return decPart != null ? `${formatted}.${decPart}` : formatted;
+  }
+
+  const handleAddToCart = async (e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    if (isInCart || !product.inStock) return;
+    setIsAdding(true);
+    dispatch(addItem(product));
+    setJustAdded(true);
+    setTimeout(() => setJustAdded(false), 1500);
+    setIsAdding(false);
+  };
   const handleGroupOrder = () => {
     if (isInGroup) {
       dispatch(removeFromGroup(product.id));
@@ -42,7 +67,10 @@ export default function ProductPage({ product }: ProductPageProps) {
       />
     ));
   };
-
+  const [isAdding, setIsAdding] = useState(false);
+  const [justAdded, setJustAdded] = useState(false);
+  const cartItems = useAppSelector((s) => s.cart.items);
+  const isInCart = cartItems.some((i) => i.id === product.id);
   return (
     <div className="max-w-7xl mx-auto px-4 py-6">
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
@@ -105,10 +133,12 @@ export default function ProductPage({ product }: ProductPageProps) {
 
             <div className="space-y-2">
               <div className="flex items-baseline space-x-2">
-                <span className="text-3xl font-bold text-red-600">${product.price.toFixed(2)}</span>
-                {product.originalPrice && (
+                <span className="text-3xl font-bold text-red-600">₹{formatIndianNumber(product.price.toFixed(2))}</span>
+                {product.price && (
                   <>
-                    <span className="text-lg text-gray-500 line-through">${product.originalPrice.toFixed(2)}</span>
+                    <span className="text-lg text-gray-500 line-through">
+                      ₹{formatIndianNumber(product.price.toFixed(2))}
+                    </span>
                     {product.discount && <Badge variant="destructive">{product.discount}</Badge>}
                   </>
                 )}
@@ -152,7 +182,7 @@ export default function ProductPage({ product }: ProductPageProps) {
         <div className="lg:col-span-3">
           <Card className="sticky top-4">
             <CardContent className="p-6 py-0 space-y-4">
-              <div className="text-2xl font-bold text-green-700">${product.price.toFixed(2)}</div>
+              <div className="text-2xl font-bold text-green-700">₹{formatIndianNumber(product.price.toFixed(2))}</div>
 
               <div className="space-y-2">
                 <div className="flex items-center space-x-2 text-sm">
@@ -188,11 +218,36 @@ export default function ProductPage({ product }: ProductPageProps) {
 
               <div className="space-y-2">
                 <Button
-                  className="w-full bg-yellow-400 hover:bg-yellow-500 text-black font-medium"
-                  disabled={!product.inStock}
+                  onClick={handleAddToCart}
+                  disabled={isAdding || isInCart || !product.inStock}
+                  className={`w-full transition-all duration-200 ${
+                    justAdded
+                      ? "bg-green-500 hover:bg-green-600 text-white"
+                      : isInCart
+                      ? "bg-gray-400 text-gray-600 cursor-not-allowed"
+                      : "bg-yellow-400 hover:bg-yellow-500 text-black"
+                  }`}
                 >
-                  <ShoppingCart className="h-4 w-4 mr-2" />
-                  Add to Cart
+                  {isAdding ? (
+                    <>
+                      <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-black mr-2"></div>
+                      Adding...
+                    </>
+                  ) : justAdded ? (
+                    <>
+                      <Check className="h-4 w-4 mr-2" />
+                      Added to Cart
+                    </>
+                  ) : isInCart ? (
+                    "In Cart"
+                  ) : !product.inStock ? (
+                    "Out of Stock"
+                  ) : (
+                    <>
+                      <ShoppingCart className="h-4 w-4 mr-2" />
+                      Add to Cart
+                    </>
+                  )}
                 </Button>
 
                 <GroupOrderProgress />

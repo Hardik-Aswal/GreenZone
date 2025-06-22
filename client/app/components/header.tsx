@@ -1,16 +1,22 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Image from "next/image";
 import { Search, MapPin, ShoppingCart, Menu, Globe } from "lucide-react";
 import { navigationItems } from "../data/mockData";
 import ToggleWrapper from "./toggle";
-import { useAppSelector } from "../store/hooks";
+import { useAppDispatch, useAppSelector } from "../store/hooks";
 import { selectMode } from "../store/modeSlice";
+import Link from "next/link";
+import { Badge } from "@/components/ui/badge";
 
 export default function Header() {
   const [searchQuery, setSearchQuery] = useState("");
   const mode = useAppSelector(selectMode) as "green" | "home";
+
+  const dispatch = useAppDispatch();
+  const totalItems = useAppSelector((s) => s.cart.totalItems);
+
   return (
     <header className={`${mode == "home" ? "bg-gray-900" : "bg-green-700"}  text-white`}>
       <div className={`${mode == "home" ? "bg-gray-900" : "bg-green-700"} px-4 py-2`}>
@@ -70,10 +76,15 @@ export default function Header() {
               <div className="font-bold">& Orders</div>
             </div>
 
-            <div className="flex items-center">
+            <Link href="/cart" className="flex items-center relative">
               <ShoppingCart className="h-6 w-6" />
               <span className="ml-1 font-bold">Cart</span>
-            </div>
+              {totalItems > 0 && (
+                <Badge className="absolute -top-2 -right-2 bg-orange-500 text-white text-xs min-w-[20px] h-5 flex items-center justify-center rounded-full">
+                  {totalItems > 99 ? "99+" : totalItems}
+                </Badge>
+              )}
+            </Link>
           </div>
         </div>
       </div>
@@ -94,7 +105,7 @@ export default function Header() {
             </a>
           ))}
         </div>
-        <ToggleWrapper/>
+        <ToggleWrapper />
       </div>
     </header>
   );
