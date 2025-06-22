@@ -1,11 +1,9 @@
-DROP TYPE IF EXISTS "public"."role";
-CREATE TYPE "public"."role" AS ENUM('customer', 'admin');--> statement-breakpoint
 CREATE TABLE "users" (
 	"id" uuid PRIMARY KEY DEFAULT gen_random_uuid() NOT NULL,
 	"email" text NOT NULL,
 	"password_hash" text NOT NULL,
 	"name" text NOT NULL,
-	"role" "role" DEFAULT 'customer' NOT NULL,
+	"role" text DEFAULT 'customer' NOT NULL,
 	"created_at" timestamp with time zone DEFAULT now() NOT NULL,
 	"updated_at" timestamp with time zone DEFAULT now() NOT NULL,
 	CONSTRAINT "users_email_unique" UNIQUE("email")
@@ -27,7 +25,12 @@ CREATE TABLE "products" (
 	"images" text[] DEFAULT '{}' NOT NULL,
 	"features" text[] DEFAULT '{}' NOT NULL,
 	"specifications" json NOT NULL,
-	"category" text,
+	"category1" text NOT NULL,
+	"category2" text NOT NULL,
+	"sector" text NOT NULL,
+	"material1" text NOT NULL,
+	"material2" text NOT NULL,
+	"weight" numeric(10, 2) NOT NULL,
 	"in_stock" integer DEFAULT 0 NOT NULL,
 	"carbon_impact" numeric(10, 2) NOT NULL,
 	"packaging_type_id" uuid NOT NULL,
