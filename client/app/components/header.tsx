@@ -9,9 +9,9 @@ import { useAppDispatch, useAppSelector } from "../store/hooks";
 import { selectMode } from "../store/modeSlice";
 import Link from "next/link";
 import { Badge } from "@/components/ui/badge";
-import { useAppDispatch } from "../store/hooks";
+
 import { logout } from "../store/userSlice";
-import Link from "next/link";
+
 
 export default function Header() {
   const [searchQuery, setSearchQuery] = useState("");
@@ -19,7 +19,7 @@ export default function Header() {
   const user = useAppSelector((state) => state.user.user);
   const dispatch = useAppDispatch();
 
-  const dispatch = useAppDispatch();
+
   const totalItems = useAppSelector((s) => s.cart.totalItems);
 
   return (
