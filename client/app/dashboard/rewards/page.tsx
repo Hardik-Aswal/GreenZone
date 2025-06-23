@@ -35,7 +35,7 @@ const rewards: Reward[] = [
     description: "Redeem for any purchase on Amazon",
     coinCost: 2500,
     category: "digital",
-    image: "/placeholder.svg?height=200&width=300",
+    image: "https://th.bing.com/th/id/OIP.0BdgIA_pnNAb4zgto-LlDgHaHa?r=0&w=1500&h=1500&rs=1&pid=ImgDetMain",
     badge: "Popular",
   },
   {
@@ -44,7 +44,7 @@ const rewards: Reward[] = [
     description: "Help reforest endangered areas worldwide",
     coinCost: 1000,
     category: "donation",
-    image: "/placeholder.svg?height=200&width=300",
+    image: "https://th.bing.com/th/id/OIP.L0bNOEA4tOyR4Ez2lF5xbAHaE4?w=296&h=196&c=7&r=0&o=7&dpr=1.3&pid=1.7&rm=3",
     badge: "Impact",
   },
   {
@@ -53,7 +53,7 @@ const rewards: Reward[] = [
     description: "Sustainable bamboo fiber water bottle",
     coinCost: 1500,
     category: "merchandise",
-    image: "/placeholder.svg?height=200&width=300",
+    image: "https://th.bing.com/th/id/OIP.0keOm_wW18S8qCCKQzCfJAHaEK?w=294&h=180&c=7&r=0&o=7&dpr=1.3&pid=1.7&rm=3",
   },
   {
     id: "4",
@@ -61,7 +61,7 @@ const rewards: Reward[] = [
     description: "20% off your next Amazon Prime subscription",
     coinCost: 800,
     category: "digital",
-    image: "/placeholder.svg?height=200&width=300",
+    image: "https://th.bing.com/th/id/OIP.wBnI-iqra45E_GjAG_kONAHaHa?w=179&h=180&c=7&r=0&o=7&dpr=1.3&pid=1.7&rm=3",
     limitedTime: true,
   },
   {
@@ -70,7 +70,7 @@ const rewards: Reward[] = [
     description: "Exclusive digital badge for your profile",
     coinCost: 500,
     category: "digital",
-    image: "/placeholder.svg?height=200&width=300",
+    image: "https://th.bing.com/th/id/OIP.fivsfTxyqY-kAR6XR1zAVQHaHb?w=190&h=191&c=7&r=0&o=7&dpr=1.3&pid=1.7&rm=3",
   },
   {
     id: "6",
@@ -78,7 +78,7 @@ const rewards: Reward[] = [
     description: "Support ocean plastic removal projects",
     coinCost: 2000,
     category: "donation",
-    image: "/placeholder.svg?height=200&width=300",
+    image: "https://th.bing.com/th/id/OIP.M9uNtJKjWjGaJONMqOZDgwHaE8?w=298&h=198&c=7&r=0&o=7&dpr=1.3&pid=1.7&rm=3",
   },
   {
     id: "7",
@@ -86,7 +86,7 @@ const rewards: Reward[] = [
     description: "Stylish eco-friendly shopping bag",
     coinCost: 1200,
     category: "merchandise",
-    image: "/placeholder.svg?height=200&width=300",
+    image: "https://th.bing.com/th/id/OIP.BHk56RgZrId0bAnKsJFhTgHaHa?r=0&rs=1&pid=ImgDetMain",
   },
   {
     id: "8",
@@ -94,7 +94,7 @@ const rewards: Reward[] = [
     description: "Portable solar-powered device charger",
     coinCost: 3000,
     category: "merchandise",
-    image: "/placeholder.svg?height=200&width=300",
+    image: "https://th.bing.com/th/id/OIP.YEL4PnHSsOYbA13XSex34QHaHa?w=196&h=196&c=7&r=0&o=7&dpr=1.3&pid=1.7&rm=3",
     badge: "Premium",
   },
 ]
@@ -129,14 +129,14 @@ const limitedOffers = [
     title: "Double Coin Weekend",
     description: "Earn 2x coins on all activities",
     timeLeft: "2 days left",
-    image: "/placeholder.svg?height=150&width=300",
+    image: "https://th.bing.com/th/id/OIP.suKqn8l1dB1W4bjjM8nKFgHaHa?w=209&h=209&c=7&r=0&o=7&dpr=1.3&pid=1.7&rm=3",
   },
   {
     id: "2",
     title: "Exclusive Eco Bundle",
     description: "3 premium eco products for 50% off coins",
     timeLeft: "5 days left",
-    image: "/placeholder.svg?height=150&width=300",
+    image: "https://th.bing.com/th/id/OIP.CPg20BNxzCCWixxOjnghigAAAA?w=159&h=180&c=7&r=0&o=7&dpr=1.3&pid=1.7&rm=3",
   },
 ]
 

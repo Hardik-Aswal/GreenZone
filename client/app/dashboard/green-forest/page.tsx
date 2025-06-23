@@ -17,7 +17,7 @@ const treeData = [
     location: "Mumbai, Maharashtra",
     plantedDate: "2024-01-15",
     co2Absorbed: 48,
-    image: "/placeholder.svg?height=200&width=300",
+    image: "https://th.bing.com/th/id/OIP.SUtkIrlLsRrYLIFz7OosswHaEK?r=0&o=7rm=3&rs=1&pid=ImgDetMain",
     description:
       "The majestic Banyan tree is India's national tree, known for its extensive canopy and aerial roots. It can live for hundreds of years and provides shelter to countless species.",
     benefits: ["Absorbs 48kg CO₂ annually", "Provides oxygen for 2 people", "Supports 1000+ species"],
@@ -29,7 +29,7 @@ const treeData = [
     location: "Jaipur, Rajasthan",
     plantedDate: "2024-02-20",
     co2Absorbed: 35,
-    image: "/placeholder.svg?height=200&width=300",
+    image: "https://neemaus.com.au/wp-content/uploads/2017/08/Neem-rosser-Pk-1.jpg",
     description:
       "Known as the 'Village Pharmacy', Neem trees have incredible medicinal properties and are excellent air purifiers in urban environments.",
     benefits: ["Natural air purifier", "Medicinal properties", "Pest control"],
@@ -41,7 +41,7 @@ const treeData = [
     location: "Varanasi, Uttar Pradesh",
     plantedDate: "2024-03-10",
     co2Absorbed: 52,
-    image: "/placeholder.svg?height=200&width=300",
+    image: "https://i.etsystatic.com/20247897/r/il/652d45/2003567321/il_fullxfull.2003567321_1tsc.jpg",
     description:
       "Sacred in Hindu tradition, the Peepal tree is unique as it releases oxygen even at night, making it invaluable for air quality.",
     benefits: ["24/7 oxygen production", "Sacred significance", "Longevity up to 2500 years"],
@@ -53,7 +53,7 @@ const treeData = [
     location: "Bangalore, Karnataka",
     plantedDate: "2024-04-05",
     co2Absorbed: 28,
-    image: "/placeholder.svg?height=200&width=300",
+    image: "https://th.bing.com/th/id/OIP.ztbRF4gHRI_TlnJFgR9RRwHaHe?r=0&rs=1&pid=ImgDetMain",
     description:
       "Famous for its vibrant red-orange flowers, Gulmohar trees are excellent shade providers and add beauty to urban landscapes.",
     benefits: ["Beautiful flowering", "Excellent shade", "Urban cooling"],
@@ -65,7 +65,7 @@ const treeData = [
     location: "Lucknow, Uttar Pradesh",
     plantedDate: "2024-05-12",
     co2Absorbed: 42,
-    image: "/placeholder.svg?height=200&width=300",
+    image: "https://th.bing.com/th/id/OIP.S9yszaMO9nl8VRRxfTEXWAHaEJ?r=0&rs=1&pid=ImgDetMain",
     description:
       "India's national fruit tree, Mango trees are not only economically valuable but also excellent carbon absorbers and biodiversity supporters.",
     benefits: ["Fruit production", "Carbon sequestration", "Economic value"],
