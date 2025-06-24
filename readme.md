@@ -1,4 +1,4 @@
-# Merge-Conflict - Eco-Friendly E-commerce Platform
+# GreenZone - Eco-Friendly E-commerce Platform
 
 A full-stack e-commerce platform focused on sustainable products with carbon footprint tracking and ML-powered recommendations.
 
