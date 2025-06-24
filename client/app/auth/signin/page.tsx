@@ -78,7 +78,7 @@ const [formData, setFormData] = useState({
         
         // Redirect based on role
         if (data.response.user.role === 'admin') {
-          router.push('/admin/dashboard');
+          router.push('/admin/addProduct');
         } else {
           router.push('/');
         }

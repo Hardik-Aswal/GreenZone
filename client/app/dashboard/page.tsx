@@ -30,7 +30,7 @@ const UserDashboard = () => {
   const [currentUser] = useState({
     name: "Sujal Chauhan",
     avatar: "👨",
-    totalEcoScore: 2847,
+    saplingCount: 3750,
     rank: "Eco Champion",
     level: 12
   });
@@ -146,8 +146,8 @@ const UserDashboard = () => {
             </div>
             
             <div className="text-right">
-              <div className="text-2xl md:text-3xl font-bold text-green-600">{currentUser.totalEcoScore.toLocaleString()}</div>
-              <div className="text-gray-600">Total EcoScore</div>
+              <div className="text-2xl md:text-3xl font-bold text-green-600">{currentUser.saplingCount.toLocaleString()}</div>
+              <div className="text-gray-600">Total Saplings</div>
               <div className="flex items-center justify-end mt-2 text-green-600">
                 <TrendingUp className="w-4 h-4 mr-1" />
                 <span className="text-sm">+12% this week</span>
@@ -164,7 +164,7 @@ const UserDashboard = () => {
                 <Leaf className="w-5 h-5 md:w-6 md:h-6 text-green-600" />
               </div>
               <div>
-                <div className="text-xl md:text-2xl font-bold text-green-600">47</div>
+                <div className="text-xl md:text-2xl font-bold text-green-600">5</div>
                 <div className="text-gray-600 text-sm">Trees Planted</div>
               </div>
             </div>
@@ -176,7 +176,7 @@ const UserDashboard = () => {
                 <Coins className="w-5 h-5 md:w-6 md:h-6 text-yellow-600" />
               </div>
               <div>
-                <div className="text-xl md:text-2xl font-bold text-yellow-600">1,240</div>
+                <div className="text-xl md:text-2xl font-bold text-yellow-600">3,750</div>
                 <div className="text-gray-600 text-sm">Saplings Earned</div>
               </div>
             </div>
@@ -188,7 +188,7 @@ const UserDashboard = () => {
                 <Target className="w-5 h-5 md:w-6 md:h-6 text-purple-600" />
               </div>
               <div>
-                <div className="text-xl md:text-2xl font-bold text-purple-600">156</div>
+                <div className="text-xl md:text-2xl font-bold text-purple-600">13</div>
                 <div className="text-gray-600 text-sm">Eco Purchases</div>
               </div>
             </div>
@@ -200,8 +200,8 @@ const UserDashboard = () => {
                 <Award className="w-5 h-5 md:w-6 md:h-6 text-orange-600" />
               </div>
               <div>
-                <div className="text-xl md:text-2xl font-bold text-orange-600">#23</div>
-                <div className="text-gray-600 text-sm">Global Rank</div>
+                <div className="text-xl md:text-2xl font-bold text-orange-600">#7</div>
+                <div className="text-gray-600 text-sm">Regional Rank</div>
               </div>
             </div>
           </div>
@@ -364,7 +364,7 @@ const UserDashboard = () => {
                   <div className="text-2xl">🌳</div>
                   <div>
                     <h3 className="font-bold text-sm md:text-base">Tree Hugger</h3>
-                    <p className="text-green-100 text-xs md:text-sm">Planted 50+ trees through purchases</p>
+                    <p className="text-green-100 text-xs md:text-sm">Planted 5 trees through purchases</p>
                   </div>
                 </div>
               </div>

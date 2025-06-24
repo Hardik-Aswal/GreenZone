@@ -16,6 +16,8 @@ import { ScrollArea } from "@/components/ui/scroll-area"
 import { Separator } from "@/components/ui/separator"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Coins, Gift, Leaf, ShoppingBag, Clock, Star, TreePine, Award, CreditCard, Crown } from "lucide-react"
+import { useAppDispatch, useAppSelector } from "@/app/store/hooks"
+import { decrementByValue } from "@/app/store/saplingSlice"
 
 interface Reward {
   id: string
@@ -144,7 +146,8 @@ export default function SaplingRewards() {
   const [selectedCategory, setSelectedCategory] = useState<string>("all")
   const [showRedeemModal, setShowRedeemModal] = useState(false)
   const [selectedReward, setSelectedReward] = useState<Reward | null>(null)
-  const [coinBalance] = useState(5250)
+  const coinBalance = useAppSelector((state) => state.sapling.value)
+  const dispatch = useAppDispatch()
 
   const filteredRewards =
     selectedCategory === "all" ? rewards : rewards.filter((reward) => reward.category === selectedCategory)
@@ -191,10 +194,7 @@ export default function SaplingRewards() {
               <h1 className="text-2xl font-bold text-gray-900">Sapling Rewards</h1>
             </div>
             <div className="flex items-center space-x-4">
-              <div className="flex items-center space-x-2 bg-green-50 px-4 py-2 rounded-full">
-                <Coins className="w-5 h-5 text-green-600" />
-                <span className="font-semibold text-green-800">{coinBalance.toLocaleString()} Coins</span>
-              </div>
+            
               <Button variant="outline" size="sm">
                 <Award className="w-4 h-4 mr-2" />
                 My Profile
@@ -419,6 +419,7 @@ export default function SaplingRewards() {
               className="bg-green-600 hover:bg-green-700"
               onClick={() => {
                 setShowRedeemModal(false)
+                dispatch(decrementByValue(selectedReward?.coinCost || 0))
                 // Handle redemption logic here
               }}
             >

@@ -5,6 +5,7 @@ import modeReducer from "./modeSlice";
 import groupOrderReducer from "./groupOrderSlice";
 import cartReducer from "./cartSlice";
 import userReducer from "./userSlice";
+import saplingReducer from "./saplingSlice";
 
 const persistConfig = {
   key: "root",
@@ -15,7 +16,8 @@ const rootReducer = combineReducers({
   mode: modeReducer,
   groupOrder: groupOrderReducer,
   cart: cartReducer,
-  user : userReducer
+  user : userReducer,
+  sapling: saplingReducer,
 });
 
 const persistedReducer = persistReducer(persistConfig, rootReducer);

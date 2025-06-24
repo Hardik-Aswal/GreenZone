@@ -81,7 +81,7 @@ export const products: ProductDetail[] = [
     seller: "Kenwood Official Store",
     warranty: "2 Years Comprehensive Warranty",
     isBestseller: true,
-    carbonImpact: 2.4,
+    carbonImpact: 240,
   },
   {
     id: "apple-ipad-pro-12-9",
@@ -127,7 +127,7 @@ export const products: ProductDetail[] = [
     seller: "Apple Official Store",
     warranty: "1 Year Limited Warranty",
     isBestseller: true,
-    carbonImpact: 1.6,
+    carbonImpact: 116,
   },
   {
     id: "amazon-echo-3rd-gen",
@@ -167,7 +167,7 @@ export const products: ProductDetail[] = [
     seller: "Amazon Official Store",
     warranty: "1 Year Limited Warranty",
     isBestseller: true,
-    carbonImpact: 0.8,
+    carbonImpact: 32,
   },
   {
     id: "woven-bag-leather-tote",
@@ -207,7 +207,7 @@ export const products: ProductDetail[] = [
     seller: "HandiCraft Boutique",
     warranty: "6 Months Manufacturing Warranty",
     isBestseller: false,
-    carbonImpact: 0.9,
+    carbonImpact: 42,
   },
   {
     id: "samsung-curved-gaming-monitor",
@@ -251,7 +251,7 @@ export const products: ProductDetail[] = [
     seller: "Samsung Official Store",
     warranty: "3 Years Comprehensive Warranty",
     isBestseller: true,
-    carbonImpact: 1.2,
+    carbonImpact: 340,
   },
   {
     id: "logitech-mx-master-3",
@@ -292,7 +292,7 @@ export const products: ProductDetail[] = [
     seller: "Logitech Official Store",
     warranty: "1 Year Limited Hardware Warranty",
     isBestseller: false,
-    carbonImpact: 1.4,
+    carbonImpact: 9.7,
   },
   {
     id: "instant-pot-duo-7-in-1",
@@ -336,7 +336,7 @@ export const products: ProductDetail[] = [
     seller: "Instant Pot Official Store",
     warranty: "1 Year Limited Warranty",
     isBestseller: true,
-    carbonImpact: 1.2,
+    carbonImpact: 140,
   },
 ];
 

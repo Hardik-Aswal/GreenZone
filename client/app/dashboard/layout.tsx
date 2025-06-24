@@ -19,6 +19,8 @@ import { FaHistory, FaLeaf, FaLessThan, FaTree } from 'react-icons/fa';
 import { HiSpeakerphone } from 'react-icons/hi';
 import { LucideBadgePercent } from 'lucide-react';
 import Image from 'next/image';
+import { useAppDispatch, useAppSelector } from '../store/hooks';
+import { incrementByValue, reset } from '../store/saplingSlice';
 
 export default function Example({ children }: { children: React.ReactNode }) {
   return (
@@ -261,7 +263,8 @@ const ToggleClose = ({
 };
 
 const SaplingCount = ()=>{
-    const saplings = 100;
+
+    const saplings = useAppSelector((state) => state.sapling.value);
 
     return (
 <div className="fixed z-50 top-36 right-4 bg-green-50 text-green-900 px-5 py-1 rounded-2xl shadow-xl flex items-center gap-3 border border-green-200 backdrop-blur-sm">
