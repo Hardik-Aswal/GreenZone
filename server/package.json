@@ -23,6 +23,7 @@
     "@types/express": "^5.0.2",
     "axios": "^1.10.0",
     "bcrypt": "^6.0.0",
+    "chalk": "^5.4.1",
     "cors": "^2.8.5",
     "dotenv": "^16.5.0",
     "drizzle-orm": "^0.44.1",

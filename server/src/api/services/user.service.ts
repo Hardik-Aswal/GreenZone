@@ -1,6 +1,6 @@
 import bcrypt from 'bcrypt';
 import { db } from '../../db/drizzle';
-import { users } from '../../db/schema';
+import { userProfile, users } from '../../db/schema';
 import { eq } from 'drizzle-orm';
 import axios from 'axios';
 
@@ -168,4 +168,10 @@ export async function processAllPincodes() {
   }
 
   return result;
+}
+
+
+export async function getUserById(userId: string) {
+    const user = await db.select().from(userProfile).where(eq(userProfile.userId, userId)).limit(1);
+    return user[0] || null;
 }

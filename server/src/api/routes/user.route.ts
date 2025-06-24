@@ -1,5 +1,5 @@
 import express from "express"
-import { createUser, loginUser } from "../controllers/user.controller";
+import { createUser, getUserProfile, loginUser } from "../controllers/user.controller";
 import { handleError } from "../../utils/response";
 import { authenticateUser } from "../../middlewares/auth.middleware";
 
@@ -12,6 +12,10 @@ router.route("/createUser").post(
 
 router.route("/login").post(
     handleError(loginUser)
+)
+
+router.route("/profile").get(
+    handleError(getUserProfile)
 )
 
 export default router
