@@ -15,6 +15,13 @@
       "when": 1750796599580,
       "tag": "0001_loud_marvel_apes",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1750799183850,
+      "tag": "0002_rapid_hobgoblin",
+      "breakpoints": true
     }
   ]
 }

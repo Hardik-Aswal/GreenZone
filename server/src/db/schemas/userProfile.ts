@@ -8,6 +8,7 @@ export const userProfile = pgTable("user_profile", {
     id : uuid("id").primaryKey().defaultRandom(),
     userId: uuid("user_id").notNull().references(() => users.id, { onDelete: "cascade" }),
     address : text("address").notNull(),
+    pincode : text("pincode"),
     totalCarbonSaved : text("total_carbon_saved").notNull().default("0"),
     saplings : text("saplings").notNull().default("0"),
     treesPlanted : text("trees_planted").notNull().default("0"),
