@@ -64,14 +64,7 @@ const Sidebar = () => {
           open={open}
           href="/dashboard/green-forest"
         />
-        <Option
-          Icon={FiBox}
-          title="Group Orders"
-          selected={selected}
-          setSelected={setSelected}
-          open={open}
-          href="/dashboard/group-orders"
-        />
+  
         <Option
           Icon={MdLeaderboard}
           title="LeaderBoard"
@@ -80,14 +73,7 @@ const Sidebar = () => {
           open={open}
           href="/dashboard/leaderboard"
         />
-        <Option
-          Icon={FaHistory}
-          title="History"
-          selected={selected}
-          setSelected={setSelected}
-          open={open}
-          href="/dashboard/history"
-        />
+  
         <Option
           Icon={LucideBadgePercent}
           title="Rewards"

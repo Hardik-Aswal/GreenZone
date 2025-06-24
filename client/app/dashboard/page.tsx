@@ -6,6 +6,7 @@ import {
   LineChart, Line
 } from 'recharts';
 import { Calendar, TrendingUp, Award, Leaf, Coins, Clock, Target, Users } from 'lucide-react';
+import { useAppSelector } from '../store/hooks';
 
 interface EcoScoreData {
   day: number;
@@ -27,10 +28,11 @@ interface SaplingData {
 const UserDashboard = () => {
   const [timeFilter, setTimeFilter] = useState<'1day' | '1week' | '1month'>('1week');
   const [chartsAnimated, setChartsAnimated] = useState(false);
+  const sapling = useAppSelector((state) => state.sapling.value);
   const [currentUser] = useState({
     name: "Sujal Chauhan",
     avatar: "👨",
-    saplingCount: 3750,
+
     rank: "Eco Champion",
     level: 12
   });
@@ -146,7 +148,7 @@ const UserDashboard = () => {
             </div>
             
             <div className="text-right">
-              <div className="text-2xl md:text-3xl font-bold text-green-600">{currentUser.saplingCount.toLocaleString()}</div>
+              <div className="text-2xl md:text-3xl font-bold text-green-600">{sapling.toLocaleString()}</div>
               <div className="text-gray-600">Total Saplings</div>
               <div className="flex items-center justify-end mt-2 text-green-600">
                 <TrendingUp className="w-4 h-4 mr-1" />
@@ -176,7 +178,7 @@ const UserDashboard = () => {
                 <Coins className="w-5 h-5 md:w-6 md:h-6 text-yellow-600" />
               </div>
               <div>
-                <div className="text-xl md:text-2xl font-bold text-yellow-600">3,750</div>
+                <div className="text-xl md:text-2xl font-bold text-yellow-600">{sapling}</div>
                 <div className="text-gray-600 text-sm">Saplings Earned</div>
               </div>
             </div>

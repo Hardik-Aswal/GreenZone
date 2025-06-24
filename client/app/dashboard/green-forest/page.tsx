@@ -1,12 +1,12 @@
 "use client"
 
-import { useState, useEffect } from "react"
+import { useState, useEffect, SetStateAction, Dispatch, useRef } from "react"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
 import { Progress } from "@/components/ui/progress"
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog"
-import { Leaf, TreePine, Award, TrendingUp, MapPin, Calendar, Share2, Sparkles, Wind, Sun } from "lucide-react"
+import { Leaf, TreePine, Award, TrendingUp, MapPin, Calendar, Share2, Sparkles, Wind, Sun, Download } from "lucide-react"
 
 // Tree data with Indian species and locations
 const treeData = [
@@ -81,12 +81,79 @@ const userStats = {
   totalRewards: 12,
 }
 
+const TreeComponent = ({ tree, index, setShowCertificate }: { tree: (typeof treeData)[0]; index: number, setShowCertificate : Dispatch<SetStateAction<boolean>> }) => (
+  <Dialog>
+    <DialogTrigger asChild>
+      <div
+        className={`relative cursor-pointer transform transition-all duration-300 hover:scale-110 ${
+          index % 2 === 0 ? "animate-pulse" : ""
+        }`}
+        style={{
+          animationDelay: `${index * 0.5}s`,
+          animationDuration: "3s",
+        }}
+      >
+        <TreePine className="w-8 h-8 md:w-12 md:h-12 text-green-600 hover:text-green-700 drop-shadow-lg" />
+        <div className="absolute -top-2 -right-2 w-4 h-4 bg-green-500 rounded-full animate-ping"></div>
+        <Badge className="absolute -bottom-6 left-1/2 transform -translate-x-1/2 text-xs bg-green-100 text-green-800 border-green-300">
+          {tree.co2Absorbed}kg CO₂
+        </Badge>
+      </div>
+    </DialogTrigger>
+    <DialogContent className="max-w-2xl">
+      <DialogHeader>
+        <DialogTitle className="flex items-center gap-2 text-green-800">
+          <TreePine className="w-6 h-6" />
+          {tree.name}
+        </DialogTitle>
+      </DialogHeader>
+      <div className="space-y-4">
+        <img src={tree.image || "/placeholder.svg"} alt={tree.name} className="w-full h-48 object-cover rounded-lg" />
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div>
+            <h4 className="font-semibold text-green-800 mb-2">Tree Details</h4>
+            <div className="space-y-2 text-sm">
+              <p>
+                <span className="font-medium">Scientific Name:</span> <em>{tree.scientificName}</em>
+              </p>
+              <p className="flex items-center gap-1">
+                <MapPin className="w-4 h-4" />
+                {tree.location}
+              </p>
+              <p className="flex items-center gap-1">
+                <Calendar className="w-4 h-4" />
+                Planted: {new Date(tree.plantedDate).toLocaleDateString()}
+              </p>
+            </div>
+          </div>
+          <div>
+            <h4 className="font-semibold text-green-800 mb-2">Environmental Benefits</h4>
+            <ul className="space-y-1 text-sm">
+              {tree.benefits.map((benefit, idx) => (
+                <li key={idx} className="flex items-center gap-2">
+                  <Leaf className="w-3 h-3 text-green-600" />
+                  {benefit}
+                </li>
+              ))}
+            </ul>
+          </div>
+        </div>
+        <p className="text-gray-700 text-sm leading-relaxed">{tree.description}</p>
+        <Button onClick={() => setShowCertificate(true)} className="w-full bg-green-600 hover:bg-green-700">
+          <Share2 className="w-4 h-4 mr-2" />
+          Generate Certificate
+        </Button>
+      </div>
+    </DialogContent>
+  </Dialog>
+)
+
 export default function GreenForestDashboard() {
   const [selectedTree, setSelectedTree] = useState<(typeof treeData)[0] | null>(null)
   const [showCelebration, setShowCelebration] = useState(false)
   const [showCertificate, setShowCertificate] = useState(false)
   const [animateCoins, setAnimateCoins] = useState(false)
-
+  const certificateRef = useRef<HTMLDivElement>(null)
   const progressPercentage = (userStats.saplingCoins / userStats.nextMilestone) * 100
 
   useEffect(() => {
@@ -97,72 +164,148 @@ export default function GreenForestDashboard() {
     return () => clearInterval(interval)
   }, [])
 
-  const TreeComponent = ({ tree, index }: { tree: (typeof treeData)[0]; index: number }) => (
-    <Dialog>
-      <DialogTrigger asChild>
-        <div
-          className={`relative cursor-pointer transform transition-all duration-300 hover:scale-110 ${
-            index % 2 === 0 ? "animate-pulse" : ""
-          }`}
-          style={{
-            animationDelay: `${index * 0.5}s`,
-            animationDuration: "3s",
-          }}
-        >
-          <TreePine className="w-8 h-8 md:w-12 md:h-12 text-green-600 hover:text-green-700 drop-shadow-lg" />
-          <div className="absolute -top-2 -right-2 w-4 h-4 bg-green-500 rounded-full animate-ping"></div>
-          <Badge className="absolute -bottom-6 left-1/2 transform -translate-x-1/2 text-xs bg-green-100 text-green-800 border-green-300">
-            {tree.co2Absorbed}kg CO₂
-          </Badge>
-        </div>
-      </DialogTrigger>
-      <DialogContent className="max-w-2xl">
-        <DialogHeader>
-          <DialogTitle className="flex items-center gap-2 text-green-800">
-            <TreePine className="w-6 h-6" />
-            {tree.name}
-          </DialogTitle>
-        </DialogHeader>
-        <div className="space-y-4">
-          <img src={tree.image || "/placeholder.svg"} alt={tree.name} className="w-full h-48 object-cover rounded-lg" />
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div>
-              <h4 className="font-semibold text-green-800 mb-2">Tree Details</h4>
-              <div className="space-y-2 text-sm">
-                <p>
-                  <span className="font-medium">Scientific Name:</span> <em>{tree.scientificName}</em>
+  const handleDownloadPDF = () => {
+    if (certificateRef.current) {
+      // Create a new window for printing
+      const printWindow = window.open('', '_blank')
+      if (printWindow) {
+        const certificateContent = certificateRef.current.innerHTML
+        
+        printWindow.document.write(`
+          <!DOCTYPE html>
+          <html>
+          <head>
+            <title>Tree Planting Certificate</title>
+            <style>
+              body {
+                font-family: Arial, sans-serif;
+                margin: 0;
+                padding: 20px;
+                background: linear-gradient(135deg, #f0fdf4 0%, #dcfce7 100%);
+              }
+              .certificate-container {
+                max-width: 800px;
+                margin: 0 auto;
+                background: white;
+                border: 3px solid #16a34a;
+                border-radius: 12px;
+                padding: 40px;
+                box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+              }
+              .certificate-header {
+                text-align: center;
+                margin-bottom: 30px;
+              }
+              .certificate-title {
+                font-size: 28px;
+                font-weight: bold;
+                color: #166534;
+                margin: 15px 0;
+              }
+              .certificate-content {
+                text-align: center;
+                line-height: 1.8;
+              }
+              .recipient-name {
+                font-size: 24px;
+                font-weight: bold;
+                color: #166534;
+                margin: 20px 0;
+              }
+              .tree-count {
+                font-size: 36px;
+                font-weight: bold;
+                color: #166534;
+                margin: 15px 0;
+              }
+              .details-grid {
+                display: grid;
+                grid-template-columns: 1fr 1fr;
+                gap: 20px;
+                margin: 30px 0;
+                text-align: left;
+              }
+              .detail-item {
+                padding: 10px;
+                background: #f0fdf4;
+                border-radius: 8px;
+              }
+              .detail-label {
+                font-weight: bold;
+                color: #166534;
+                font-size: 14px;
+              }
+              .detail-value {
+                color: #166534;
+                font-size: 16px;
+              }
+              .certificate-footer {
+                margin-top: 40px;
+                text-align: center;
+                font-size: 14px;
+                color: #166534;
+              }
+              @media print {
+                body { background: white; }
+                .certificate-container { box-shadow: none; }
+              }
+            </style>
+          </head>
+          <body>
+            <div class="certificate-container">
+              <div class="certificate-header">
+                <div style="font-size: 48px;">🏆</div>
+                <h1 class="certificate-title">Certificate of Environmental Impact</h1>
+              </div>
+              
+              <div class="certificate-content">
+                <p style="font-size: 18px; color: #166534;">
+                  This certifies that <span class="recipient-name">Green Warrior</span> has successfully planted
                 </p>
-                <p className="flex items-center gap-1">
-                  <MapPin className="w-4 h-4" />
-                  {tree.location}
+                <div class="tree-count">1 Tree</div>
+                <p style="font-size: 16px; color: #166534; margin: 20px 0;">
+                  Contributing to a greener planet and sustainable future
                 </p>
-                <p className="flex items-center gap-1">
-                  <Calendar className="w-4 h-4" />
-                  Planted: {new Date(tree.plantedDate).toLocaleDateString()}
-                </p>
+                
+                <div class="details-grid">
+                  <div class="detail-item">
+                    <div class="detail-label">Date Planted</div>
+                    <div class="detail-value">${new Date().toLocaleDateString()}</div>
+                  </div>
+                  <div class="detail-item">
+                    <div class="detail-label">Estimated CO₂ Absorption</div>
+                    <div class="detail-value">35kg annually</div>
+                  </div>
+                  <div class="detail-item">
+                    <div class="detail-label">Certificate ID</div>
+                    <div class="detail-value">GF-${Date.now()}</div>
+                  </div>
+                  <div class="detail-item">
+                    <div class="detail-label">Organization</div>
+                    <div class="detail-value">Amazon GreenForest</div>
+                  </div>
+                </div>
+                
+                <div class="certificate-footer">
+                  <p>🌱 Together, we're building a greener tomorrow 🌱</p>
+                  <p>This certificate represents your commitment to environmental sustainability</p>
+                </div>
               </div>
             </div>
-            <div>
-              <h4 className="font-semibold text-green-800 mb-2">Environmental Benefits</h4>
-              <ul className="space-y-1 text-sm">
-                {tree.benefits.map((benefit, idx) => (
-                  <li key={idx} className="flex items-center gap-2">
-                    <Leaf className="w-3 h-3 text-green-600" />
-                    {benefit}
-                  </li>
-                ))}
-              </ul>
-            </div>
-          </div>
-          <p className="text-gray-700 text-sm leading-relaxed">{tree.description}</p>
-          <Button onClick={() => setShowCertificate(true)} className="w-full bg-green-600 hover:bg-green-700">
-            <Share2 className="w-4 h-4 mr-2" />
-            Generate Certificate
-          </Button>
-        </div>
-      </DialogContent>
-    </Dialog>
-  )
+          </body>
+          </html>
+        `)
+        
+        printWindow.document.close()
+        
+        // Wait for content to load, then print
+        setTimeout(() => {
+          printWindow.print()
+          printWindow.close()
+        }, 500)
+      }
+    }
+  }
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-green-50 via-emerald-50 to-teal-50 p-4">
@@ -242,19 +385,19 @@ export default function GreenForestDashboard() {
 
                 {/* Trees arranged in a natural pattern */}
                 <div className="absolute bottom-8 left-8">
-                  <TreeComponent tree={treeData[0]} index={0} />
+                  <TreeComponent tree={treeData[0]} index={0} setShowCertificate={setShowCertificate} />
                 </div>
                 <div className="absolute bottom-12 left-24">
-                  <TreeComponent tree={treeData[1]} index={1} />
+                  <TreeComponent tree={treeData[1]} index={1} setShowCertificate={setShowCertificate} />
                 </div>
                 <div className="absolute bottom-6 left-40">
-                  <TreeComponent tree={treeData[2]} index={2} />
+                  <TreeComponent tree={treeData[2]} index={2} setShowCertificate={setShowCertificate} />
                 </div>
                 <div className="absolute bottom-16 right-32">
-                  <TreeComponent tree={treeData[3]} index={3} />
+                  <TreeComponent tree={treeData[3]} index={3} setShowCertificate={setShowCertificate} />
                 </div>
                 <div className="absolute bottom-8 right-16">
-                  <TreeComponent tree={treeData[4]} index={4} />
+                  <TreeComponent tree={treeData[4]} index={4} setShowCertificate={setShowCertificate} />
                 </div>
 
                 {/* Ground */}
@@ -366,7 +509,7 @@ export default function GreenForestDashboard() {
           <DialogHeader>
             <DialogTitle className="text-green-800">Tree Planting Certificate</DialogTitle>
           </DialogHeader>
-          <div className="bg-gradient-to-br from-green-50 to-emerald-50 p-8 rounded-lg border-2 border-green-200">
+          <div ref={certificateRef} className="bg-gradient-to-br from-green-50 to-emerald-50 p-8 rounded-lg border-2 border-green-200">
             <div className="text-center space-y-4">
               <div className="text-4xl">🏆</div>
               <h2 className="text-2xl font-bold text-green-800">Certificate of Environmental Impact</h2>
@@ -392,7 +535,12 @@ export default function GreenForestDashboard() {
                   <Share2 className="w-4 h-4 mr-2" />
                   Share Certificate
                 </Button>
-                <Button variant="outline" className="flex-1 border-green-300 text-green-700">
+                <Button 
+                  variant="outline" 
+                  className="flex-1 border-green-300 text-green-700 hover:bg-green-50" 
+                  onClick={handleDownloadPDF}
+                >
+                  <Download className="w-4 h-4 mr-2" />
                   Download PDF
                 </Button>
               </div>
