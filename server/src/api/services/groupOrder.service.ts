@@ -1,3 +1,5 @@
+import dotenv from "dotenv"
+dotenv .config()
 import { db } from "../../db/drizzle";
 import { products, productRelations } from "../../db/schemas/product";
 import { reviews } from "../../db/schemas/review";
@@ -13,11 +15,101 @@ import { groupOrders } from "../../db/schema";
 
 
 // ------------------ Types ------------------
-export async function compute(pincode : number){
-  
-  const groupData = await db.select().from(groupOrders).where(eq(groupOrders.pin_code, pincode.toString()));
-  return groupData
+const GOOGLE_API_KEY = process.env.GOOGLE_API_KEY;
+type Coordinate = [number, number];
 
+class DSU {
+  parent: number[];
+  constructor(size: number) {
+    this.parent = Array.from({ length: size }, (_, i) => i);
+  }
+
+  find(u: number): number {
+    if (u !== this.parent[u]) {
+      this.parent[u] = this.find(this.parent[u]);
+    }
+    return this.parent[u];
+  }
+
+  union(u: number, v: number): boolean {
+    const pu = this.find(u);
+    const pv = this.find(v);
+    if (pu !== pv) {
+      this.parent[pu] = pv;
+      return true;
+    }
+    return false;
+  }
+}
+
+async function getDistance(from: Coordinate, to: Coordinate): Promise<number> {
+  const origins = `${from[0]},${from[1]}`;
+  const destinations = `${to[0]},${to[1]}`;
+  const url = `https://maps.googleapis.com/maps/api/distancematrix/json?origins=${origins}&destinations=${destinations}&key=${GOOGLE_API_KEY}`;
+
+  try {
+    const response = await axios.get(url);
+    return response.data.rows[0].elements[0].distance.value; // in meters
+  } catch (error) {
+    console.error("Google Maps API Error:", error);
+    return Infinity;
+  }
+}
+
+export async function compute(pincode: number) {
+  const groupData = await db
+    .select()
+    .from(groupOrders)
+    .where(eq(groupOrders.pin_code, pincode.toString()));
+
+  if (!groupData.length) return null;
+
+  const coords: Coordinate[] = [];
+  const coordToOrders = new Map<string, string[]>();
+
+  for (const group of groupData) {
+    const latArr = group.lat as string[];
+    const lngArr = group.lng as string[];
+    const orderIds = group.orderIds as string[];
+
+    for (let i = 0; i < orderIds.length; i++) {
+      const lat = parseFloat(latArr[i]);
+      const lng = parseFloat(lngArr[i]);
+      const coord: Coordinate = [lat, lng];
+      const key = `${lat},${lng}`;
+
+      coords.push(coord);
+      if (!coordToOrders.has(key)) coordToOrders.set(key, []);
+      coordToOrders.get(key)!.push(orderIds[i]);
+    }
+  }
+
+  const edges: { from: number; to: number; distance: number }[] = [];
+
+  for (let i = 0; i < coords.length; i++) {
+    for (let j = i + 1; j < coords.length; j++) {
+      const dist = await getDistance(coords[i], coords[j]);
+      edges.push({ from: i, to: j, distance: dist });
+    }
+  }
+  const dsu = new DSU(coords.length);
+  edges.sort((a, b) => a.distance - b.distance);
+
+  let totalWeight = 0;
+  const mstLinks: Coordinate[][] = [];
+
+  for (const edge of edges) {
+    if (dsu.union(edge.from, edge.to)) {
+      totalWeight += edge.distance;
+      mstLinks.push([coords[edge.from], coords[edge.to]]);
+    }
+  }
+
+  return {
+    distance: totalWeight,
+    Links: mstLinks,
+    coordToOrders: Object.fromEntries(coordToOrders),
+  };
 }
 
 
