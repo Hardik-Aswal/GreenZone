@@ -17,17 +17,32 @@ import GroupOrderProgress from "./groupOrderProgress";
 import ProductReviews from "./productReview";
 import { addItem } from "../store/cartSlice";
 import { formatIndianNumber } from "@/lib/utils";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 
 interface ProductPageProps {
   product: ProductDetail;
 }
-
+export enum PackagingType {
+  RecyclablePaper = "recyclable-paper",
+  BiodegradablePlastic = "biodegradable-plastic",
+  ReusableGlass = "reusable-glass",
+  CompostableBagasse = "compostable-bagasse",
+  MinimalPackaging = "minimal-packaging",
+}
+const packagingOptions: { value: PackagingType; label: string; score: string }[] = [
+  { value: PackagingType.RecyclablePaper, label: "Recyclable Paper", score: "9.5" },
+  { value: PackagingType.BiodegradablePlastic, label: "Biodegradable Plastic", score: "8.0" },
+  { value: PackagingType.ReusableGlass, label: "Reusable Glass", score: "9.0" },
+  { value: PackagingType.CompostableBagasse, label: "Compostable Bagasse", score: "8.8" },
+  { value: PackagingType.MinimalPackaging, label: "Minimal Packaging", score: "10.0" },
+];
 export default function ProductPage({ product }: ProductPageProps) {
   const [selectedImage, setSelectedImage] = useState(0);
   const [quantity, setQuantity] = useState(1);
   const [isAdding, setIsAdding] = useState(false);
   const [justAdded, setJustAdded] = useState(false);
-
+  const [open, setOpen] = useState(false);
+  const [selectedPackaging, setSelectedPackaging] = useState<PackagingType>(PackagingType.RecyclablePaper);
   const dispatch = useAppDispatch();
   const { groupedOrders, isGroupComplete } = useAppSelector((state) => state.groupOrder);
   const cartItems = useAppSelector((s) => s.cart.items);
@@ -313,11 +328,41 @@ export default function ProductPage({ product }: ProductPageProps) {
                 {isGroupComplete && <div className="text-green-600 font-medium">✓ Group order benefits unlocked!</div>}
               </div>
 
-              {product.supportsEcoPackaging && (
+              {/* {product.supportsEcoPackaging && (
                 <Button variant="outline" className="w-full border-green-500 text-green-600 hover:bg-green-50">
                   <Leaf className="h-4 w-4 mr-2" />
                   Choose Eco Packaging
                 </Button>
+              )} */}
+              {product.supportsEcoPackaging && (
+                <div className="space-y-2">
+                  <label className="block text-sm font-medium">Choose Packaging</label>
+                  <Select
+                    open={open}
+                    onOpenChange={setOpen}
+                    value={selectedPackaging}
+                    onValueChange={(val) => setSelectedPackaging(val as PackagingType)}
+                  >
+                    <SelectTrigger className="w-full">
+                      <SelectValue placeholder="Select packaging type" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {packagingOptions.map((opt) => (
+                        <SelectItem key={opt.value} value={opt.value}>
+                          {opt.label} ({opt.score})
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                  <Button
+                    variant="outline"
+                    className="w-full border-green-500 text-green-600 hover:bg-green-50"
+                    onClick={() => setOpen(true)}
+                  >
+                    <Leaf className="h-4 w-4 mr-2" />
+                    Choose Eco Packaging
+                  </Button>
+                </div>
               )}
             </CardContent>
           </Card>

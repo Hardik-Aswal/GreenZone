@@ -52,7 +52,6 @@ export default function CartPage() {
                   </Link>
                   <p className="text-sm text-gray-600">by {item.brand}</p>
 
-                  {/* Qty controls */}
                   <div className="flex items-center space-x-2 mt-2">
                     <button
                       onClick={() =>
@@ -61,22 +60,22 @@ export default function CartPage() {
                       disabled={!canDecrease}
                       className="p-1 disabled:opacity-50 disabled:cursor-not-allowed"
                     >
-                      <Minus className="h-4 w-4" />
+                      <Minus className="h-4 w-4 cursor-pointer" />
                     </button>
                     <span>{item.quantity}</span>
                     <button
                       onClick={() => dispatch(updateQuantity({ id: item.id, quantity: item.quantity + 1 }))}
                       className="p-1"
                     >
-                      <Plus className="h-4 w-4" />
+                      <Plus className="h-4 w-4 cursor-pointer" />
                     </button>
                   </div>
 
                   <button
-                    className="text-red-600 text-sm mt-2 flex items-center"
+                    className="text-red-600 text-sm mt-2 flex items-center cursor-pointer"
                     onClick={() => dispatch(removeItem(item.id))}
                   >
-                    <Trash2 className="mr-1 h-4 w-4" /> Remove
+                    <Trash2 className="mr-1 h-4 w-4 " /> Remove
                   </button>
                 </div>
                 <div className="text-right">
@@ -100,12 +99,18 @@ export default function CartPage() {
           <span>₹{formatIndianNumber((totalAmount ?? 0).toFixed(2))}</span>
         </div>
         <Separator />
-        <Button className="w-full bg-yellow-400 text-black hover:bg-yellow-500">Proceed to Checkout</Button>
-        <Button variant="outline" className="w-full" onClick={() => dispatch(clearCart())}>
+        <Button className="w-full bg-yellow-400 text-black hover:bg-yellow-500 cursor-pointer">
+          Proceed to Checkout
+        </Button>
+        <Button
+          variant="destructive"
+          className="w-full hover:bg-red-700 cursor-pointer"
+          onClick={() => dispatch(clearCart())}
+        >
           Clear Cart
         </Button>
         <Link href="/">
-          <Button variant="outline" className="w-full">
+          <Button variant="outline" className="w-full cursor-pointer">
             Continue Shopping
           </Button>
         </Link>
