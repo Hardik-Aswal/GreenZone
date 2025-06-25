@@ -7,24 +7,12 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
 import { useAppSelector, useAppDispatch } from "../store/hooks";
 import { removeItem, updateQuantity, clearCart } from "../store/cartSlice";
+import { formatIndianNumber } from "@/lib/utils";
 
 export default function CartPage() {
   const dispatch = useAppDispatch();
   const { items, totalItems, totalAmount } = useAppSelector((s) => s.cart);
 
-  function formatIndianNumber(price: string): string {
-    const [intPart, decPart] = price.split(".");
-    let lastThree = intPart.slice(-3);
-    let otherNumbers = intPart.slice(0, -3);
-
-    if (otherNumbers !== "") {
-      lastThree = "," + lastThree;
-      otherNumbers = otherNumbers.replace(/\B(?=(\d{2})+(?!\d))/g, ",");
-    }
-
-    const formatted = otherNumbers + lastThree;
-    return decPart != null ? `${formatted}.${decPart}` : formatted;
-  }
   if (items.length === 0) {
     return (
       <div className="p-8 text-center">
@@ -35,12 +23,17 @@ export default function CartPage() {
       </div>
     );
   }
-
   return (
     <div className="p-8 grid lg:grid-cols-3 gap-6">
       <div className="lg:col-span-2 space-y-6">
         {items.map((item) => {
+          const originalPrice = item.originalPrice * 1.0;
+          const discountAmount = (item.discount * originalPrice) / 100;
+          const finalPrice = originalPrice - discountAmount;
+          const totalOriginal = originalPrice * item.quantity * 1.0;
+          const totalFinal = finalPrice * item.quantity * 1.0;
           const canDecrease = item.quantity > 1;
+          console.log("prices", originalPrice, discountAmount, finalPrice, totalOriginal, totalFinal);
           return (
             <Card key={item.id}>
               <CardContent className="flex items-start space-x-4">
@@ -87,11 +80,10 @@ export default function CartPage() {
                   </button>
                 </div>
                 <div className="text-right">
-                  {/* use item.price, not originalPrice */}
-                  <div className="font-bold">₹{formatIndianNumber((item.price * item.quantity).toFixed(2))}</div>
-                  {item.price && (
+                  <div className="font-bold">₹{formatIndianNumber(totalFinal?.toFixed(2))}</div>
+                  {item.discount > 0 && (
                     <div className="text-sm text-gray-500 line-through">
-                      ₹{formatIndianNumber((item.price * item.quantity).toFixed(2))}
+                      ₹{formatIndianNumber(totalOriginal?.toFixed(2))}
                     </div>
                   )}
                 </div>
@@ -105,7 +97,7 @@ export default function CartPage() {
         <h2 className="text-xl font-bold">Order Summary</h2>
         <div className="flex justify-between">
           <span>Subtotal ({totalItems} items)</span>
-          <span>₹{formatIndianNumber(totalAmount.toFixed(2))}</span>
+          <span>₹{formatIndianNumber((totalAmount ?? 0).toFixed(2))}</span>
         </div>
         <Separator />
         <Button className="w-full bg-yellow-400 text-black hover:bg-yellow-500">Proceed to Checkout</Button>

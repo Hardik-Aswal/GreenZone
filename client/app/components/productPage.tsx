@@ -1,8 +1,10 @@
 "use client";
 
+import type React from "react";
+
 import { useState } from "react";
 import Image from "next/image";
-import { Star, Heart, Share2, ShoppingCart, Truck, Shield, Award, Users, Check } from "lucide-react";
+import { Star, Heart, Share2, ShoppingCart, Truck, Shield, Award, Users, Check, Leaf } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent } from "@/components/ui/card";
@@ -14,6 +16,7 @@ import type { ProductDetail } from "../types/product";
 import GroupOrderProgress from "./groupOrderProgress";
 import ProductReviews from "./productReview";
 import { addItem } from "../store/cartSlice";
+import { formatIndianNumber } from "@/lib/utils";
 
 interface ProductPageProps {
   product: ProductDetail;
@@ -22,24 +25,27 @@ interface ProductPageProps {
 export default function ProductPage({ product }: ProductPageProps) {
   const [selectedImage, setSelectedImage] = useState(0);
   const [quantity, setQuantity] = useState(1);
+  const [isAdding, setIsAdding] = useState(false);
+  const [justAdded, setJustAdded] = useState(false);
 
   const dispatch = useAppDispatch();
   const { groupedOrders, isGroupComplete } = useAppSelector((state) => state.groupOrder);
+  const cartItems = useAppSelector((s) => s.cart.items);
+  const isInCart = cartItems.some((i) => i.id === product.id);
   const isInGroup = groupedOrders.includes(product.id);
 
-  function formatIndianNumber(price: string): string {
-    const [intPart, decPart] = price.split(".");
-    let lastThree = intPart.slice(-3);
-    let otherNumbers = intPart.slice(0, -3);
+  const calculateAverageRating = () => {
+    if (!product.reviews || product.reviews.length === 0) return 0;
+    const totalRating = product.reviews.reduce((sum, review) => sum + review.rating, 0);
+    return totalRating / product.reviews.length;
+  };
 
-    if (otherNumbers !== "") {
-      lastThree = "," + lastThree;
-      otherNumbers = otherNumbers.replace(/\B(?=(\d{2})+(?!\d))/g, ",");
-    }
+  const averageRating = calculateAverageRating();
+  const reviewCount = product.reviews?.length || 0;
 
-    const formatted = otherNumbers + lastThree;
-    return decPart != null ? `${formatted}.${decPart}` : formatted;
-  }
+  const originalPrice = product.originalPrice * 1.0;
+  const discountAmount = (product.discount * originalPrice) / 100;
+  const finalPrice = originalPrice - discountAmount;
 
   const handleAddToCart = async (e: React.MouseEvent) => {
     e.preventDefault();
@@ -51,6 +57,7 @@ export default function ProductPage({ product }: ProductPageProps) {
     setTimeout(() => setJustAdded(false), 1500);
     setIsAdding(false);
   };
+
   const handleGroupOrder = () => {
     if (isInGroup) {
       dispatch(removeFromGroup(product.id));
@@ -67,10 +74,7 @@ export default function ProductPage({ product }: ProductPageProps) {
       />
     ));
   };
-  const [isAdding, setIsAdding] = useState(false);
-  const [justAdded, setJustAdded] = useState(false);
-  const cartItems = useAppSelector((s) => s.cart.items);
-  const isInCart = cartItems.some((i) => i.id === product.id);
+
   return (
     <div className="max-w-7xl mx-auto px-4 py-6">
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
@@ -110,7 +114,7 @@ export default function ProductPage({ product }: ProductPageProps) {
         <div className="lg:col-span-4">
           <div className="space-y-4">
             <div>
-              {product.isBestseller && (
+              {product.isBestSeller && (
                 <Badge variant="secondary" className="mb-2 bg-yellow-500 text-white">
                   BESTSELLER
                 </Badge>
@@ -118,48 +122,62 @@ export default function ProductPage({ product }: ProductPageProps) {
               <Badge variant="outline" className="mb-2 ml-2">
                 {product.brand}
               </Badge>
-              <h1 className="text-2xl font-bold text-gray-900">{product.title}</h1>
+              <h1 className="text-2xl font-bold text-gray-900 mb-3">{product.title}</h1>
+
+              {product.ecoTags && product.ecoTags.length > 0 && (
+                <div className="flex flex-wrap gap-2 mb-4">
+                  {product.ecoTags.map((tag, index) => (
+                    <Badge key={index} variant="outline" className="bg-green-50 text-green-700 border-green-200">
+                      <Leaf className="h-3 w-3 mr-1" />
+                      {tag}
+                    </Badge>
+                  ))}
+                </div>
+              )}
             </div>
 
             <div className="flex items-center space-x-2">
               <div className="flex items-center">
-                {renderStars(product.rating)}
-                <span className="ml-2 text-sm font-medium">{product.rating}</span>
+                {renderStars(averageRating)}
+                <span className="ml-2 text-sm font-medium">{averageRating.toFixed(1)}</span>
               </div>
               <span className="text-sm text-blue-600 hover:underline cursor-pointer">
-                {product.reviewCount.toLocaleString()} ratings
+                {reviewCount.toLocaleString()} ratings
               </span>
             </div>
 
             <div className="space-y-2">
               <div className="flex items-baseline space-x-2">
-                <span className="text-3xl font-bold text-red-600">₹{formatIndianNumber(product.price.toFixed(2))}</span>
-                {product.price && (
+                <span className="text-3xl font-bold text-red-600">₹{formatIndianNumber(finalPrice.toFixed(2))}</span>
+                {discountAmount > 0 && (
                   <>
                     <span className="text-lg text-gray-500 line-through">
-                      ₹{formatIndianNumber(product.price.toFixed(2))}
+                      ₹{formatIndianNumber(originalPrice.toFixed(2))}
                     </span>
-                    {product.discount && <Badge variant="destructive">{product.discount}</Badge>}
+                    <Badge variant="destructive">{Math.round((discountAmount / originalPrice) * 100)}% off</Badge>
                   </>
                 )}
               </div>
               <p className="text-sm text-gray-600">Inclusive of all taxes</p>
+              <p className="text-sm text-green-700">Carbon impact: {product.carbonImpact} kg CO₂e</p>
             </div>
 
             <div className="space-y-3">
-              <div className="flex items-center space-x-2 text-sm">
-                <Truck className="h-4 w-4 text-green-600" />
-                <span>{product.delivery.standard}</span>
-              </div>
-              {product.delivery.express && (
+              {product.deliveryType && product.deliveryType.includes("standard") && (
+                <div className="flex items-center space-x-2 text-sm">
+                  <Truck className="h-4 w-4 text-green-600" />
+                  <span>FREE delivery by 8 July</span>
+                </div>
+              )}
+              {product.deliveryType && product.deliveryType.includes("express") && (
                 <div className="flex items-center space-x-2 text-sm">
                   <Truck className="h-4 w-4 text-blue-600" />
-                  <span className="text-blue-600">{product.delivery.express}</span>
+                  <span className="text-blue-600">Same day delivery available</span>
                 </div>
               )}
               <div className="flex items-center space-x-2 text-sm">
                 <Shield className="h-4 w-4 text-green-600" />
-                <span>{product.warranty}</span>
+                <span>1 Year Limited Warranty</span>
               </div>
             </div>
 
@@ -181,21 +199,24 @@ export default function ProductPage({ product }: ProductPageProps) {
 
         <div className="lg:col-span-3">
           <Card className="sticky top-4">
-            <CardContent className="p-6 py-0 space-y-4">
-              <div className="text-2xl font-bold text-green-700">₹{formatIndianNumber(product.price.toFixed(2))}</div>
-              <p className="text-sm text-green-700">Carbon impact: {product.carbonImpact.toFixed(1)} kg CO₂e</p>
+            <CardContent className="p-6 space-y-3 py-0">
+              <div className="text-2xl font-bold text-green-700">₹{formatIndianNumber(finalPrice.toFixed(2))}</div>
+              <p className="text-sm text-green-700">Carbon impact: {product.carbonImpact} kg CO₂e</p>
+
               <div className="space-y-2">
-                <div className="flex items-center space-x-2 text-sm">
-                  <Truck className="h-4 w-4 text-green-600" />
-                  <span className="text-green-600">{product.delivery.standard}</span>
-                </div>
+                {product.deliveryType && product.deliveryType.includes("standard") && (
+                  <div className="flex items-center space-x-2 text-sm">
+                    <Truck className="h-4 w-4 text-green-600" />
+                    <span className="text-green-600">FREE delivery by 8 July</span>
+                  </div>
+                )}
                 <div className="text-sm">
-                  <span className="font-medium">Sold by:</span> {product.seller}
+                  <span className="font-medium">Sold by:</span> {product.brand}
                 </div>
                 <div className="text-sm">
                   <span className="font-medium">Stock:</span>{" "}
-                  <span className={product.inStock ? "text-green-600" : "text-red-600"}>
-                    {product.inStock ? "In Stock" : "Out of Stock"}
+                  <span className={product.inStock > 0 ? "text-green-600" : "text-red-600"}>
+                    {product.inStock > 0 ? `In Stock` : "Out of Stock"}
                   </span>
                 </div>
               </div>
@@ -206,9 +227,9 @@ export default function ProductPage({ product }: ProductPageProps) {
                   value={quantity}
                   onChange={(e) => setQuantity(Number(e.target.value))}
                   className="w-full p-2 border rounded-md"
-                  disabled={!product.inStock}
+                  disabled={product.inStock === 0}
                 >
-                  {[1, 2, 3, 4, 5].map((num) => (
+                  {Array.from({ length: Math.min(5, product.inStock) }, (_, i) => i + 1).map((num) => (
                     <option key={num} value={num}>
                       {num}
                     </option>
@@ -219,7 +240,7 @@ export default function ProductPage({ product }: ProductPageProps) {
               <div className="space-y-2">
                 <Button
                   onClick={handleAddToCart}
-                  disabled={isAdding || isInCart || !product.inStock}
+                  disabled={isAdding || isInCart || product.inStock === 0}
                   className={`w-full transition-all duration-200 ${
                     justAdded
                       ? "bg-green-500 hover:bg-green-600 text-white"
@@ -240,7 +261,7 @@ export default function ProductPage({ product }: ProductPageProps) {
                     </>
                   ) : isInCart ? (
                     "In Cart"
-                  ) : !product.inStock ? (
+                  ) : product.inStock === 0 ? (
                     "Out of Stock"
                   ) : (
                     <>
@@ -259,14 +280,14 @@ export default function ProductPage({ product }: ProductPageProps) {
                       ? "bg-green-800 hover:bg-green-900 text-white"
                       : "bg-green-700 hover:bg-green-800 text-white"
                   } ${isGroupComplete ? "ring-2 ring-green-300 ring-offset-2" : ""}`}
-                  disabled={!product.inStock}
+                  disabled={product.inStock === 0}
                 >
                   <Users className="h-4 w-4 mr-2" />
                   {isInGroup ? "Remove from Group" : "Group By Order"}
                   {isGroupComplete && !isInGroup && " (Ready!)"}
                 </Button>
 
-                <Button variant="outline" className="w-full" disabled={!product.inStock}>
+                <Button variant="outline" className="w-full" disabled={product.inStock === 0}>
                   Buy Now
                 </Button>
               </div>
@@ -285,14 +306,25 @@ export default function ProductPage({ product }: ProductPageProps) {
               <div className="text-xs text-gray-600 space-y-1">
                 <div>✓ 7 days replacement policy</div>
                 <div>✓ GST invoice available</div>
-                <div>✓ Amazon delivered</div>
+                <div>✓ Eco-friendly delivery</div>
+                {product.supportsEcoPackaging && (
+                  <div className="text-green-600 font-medium">✓ Eco packaging available</div>
+                )}
                 {isGroupComplete && <div className="text-green-600 font-medium">✓ Group order benefits unlocked!</div>}
               </div>
+
+              {product.supportsEcoPackaging && (
+                <Button variant="outline" className="w-full border-green-500 text-green-600 hover:bg-green-50">
+                  <Leaf className="h-4 w-4 mr-2" />
+                  Choose Eco Packaging
+                </Button>
+              )}
             </CardContent>
           </Card>
         </div>
       </div>
 
+      {/* Product Information Tabs */}
       <div className="mt-12">
         <Tabs defaultValue="description" className="w-full">
           <TabsList className="grid w-full grid-cols-3">
@@ -316,6 +348,20 @@ export default function ProductPage({ product }: ProductPageProps) {
                     </li>
                   ))}
                 </ul>
+
+                {product.ecoTags && product.ecoTags.length > 0 && (
+                  <div className="mt-6">
+                    <h4 className="font-semibold mb-3">Sustainability Features:</h4>
+                    <div className="flex flex-wrap gap-2">
+                      {product.ecoTags.map((tag, index) => (
+                        <Badge key={index} variant="outline" className="bg-green-50 text-green-700 border-green-200">
+                          <Leaf className="h-3 w-3 mr-1" />
+                          {tag}
+                        </Badge>
+                      ))}
+                    </div>
+                  </div>
+                )}
               </CardContent>
             </Card>
           </TabsContent>
@@ -327,17 +373,33 @@ export default function ProductPage({ product }: ProductPageProps) {
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   {Object.entries(product.specifications).map(([key, value]) => (
                     <div key={key} className="flex justify-between py-2 border-b border-gray-100">
-                      <span className="font-medium text-gray-600">{key}:</span>
+                      <span className="font-medium text-gray-600 capitalize">{key}:</span>
                       <span className="text-gray-900">{value}</span>
                     </div>
                   ))}
+                  <div className="flex justify-between py-2 border-b border-gray-100">
+                    <span className="font-medium text-gray-600">Carbon Impact:</span>
+                    <span className="text-gray-900">{product.carbonImpact} kg CO₂e</span>
+                  </div>
+                  <div className="flex justify-between py-2 border-b border-gray-100">
+                    <span className="font-medium text-gray-600">Weight:</span>
+                    <span className="text-gray-900">{product.weight} kg</span>
+                  </div>
+                  <div className="flex justify-between py-2 border-b border-gray-100">
+                    <span className="font-medium text-gray-600">Category:</span>
+                    <span className="text-gray-900">{product.category1}</span>
+                  </div>
+                  <div className="flex justify-between py-2 border-b border-gray-100">
+                    <span className="font-medium text-gray-600">Sector:</span>
+                    <span className="text-gray-900">{product.sector}</span>
+                  </div>
                 </div>
               </CardContent>
             </Card>
           </TabsContent>
 
           <TabsContent value="reviews" className="mt-6">
-            <ProductReviews productId={product.id} rating={product.rating} reviewCount={product.reviewCount} />
+            <ProductReviews rating={averageRating} reviewCount={reviewCount} reviews={product.reviews ?? []} />
           </TabsContent>
         </Tabs>
       </div>

@@ -2,29 +2,35 @@ export interface ProductDetail {
   id: string;
   title: string;
   brand: string;
-  rating: number;
-  reviewCount: number;
-  price: number;
-  originalPrice?: number;
-  discount?: string;
-  images: string[];
+  originalPrice: number;
+  discount: number;
   description: string;
+  images: string[];
   features: string[];
-  specifications: Record<string, string>;
-  inStock: boolean;
-  delivery: {
-    standard: string;
-    express?: string;
-  };
-  seller: string;
-  warranty: string;
-  isBestseller?: boolean;
+  specifications: Record<string, any>;
+  category1: string;
+  category2: string;
+  sector: string;
+  material1: string;
+  material2: string;
+  weight: number;
+  inStock: number;
   carbonImpact: number;
+  packagingTypeId: string;
+  ecoTags: string[];
+  supportsEcoPackaging: boolean;
+  deliveryType: string[];
+  createdAt: string;
+  updatedAt: string;
+  sellerId: string;
+  reviews?: Review[];
+  isBestSeller?: boolean;
 }
 
 export interface Review {
   id: string;
-  userName: string;
+  userId: string;
+  productId: string;
   rating: number;
   title: string;
   content: string;

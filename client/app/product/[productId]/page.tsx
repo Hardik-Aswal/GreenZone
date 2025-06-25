@@ -1,17 +1,50 @@
-import { notFound } from "next/navigation";
+"use client";
+
+import { notFound, useParams } from "next/navigation";
 import ProductPage from "../../components/productPage";
-import { productData } from "../../data/productData";
+import { ProductDetail } from "@/app/types/product";
+import { useEffect, useState } from "react";
+import axios from "axios";
+import { Skeleton } from "@/components/ui/skeleton";
 
-interface ProductPageProps {
-  params: Promise<{ productId: string }>;
-}
+export default function ProductClientPage() {
+  const { productId } = useParams();
+  const [product, setProduct] = useState<ProductDetail | null>(null);
+  const [hasError, setHasError] = useState(false);
 
-export default async function Product({ params }: ProductPageProps) {
-  const { productId } = await params;
-  const product = productData[productId];
+  useEffect(() => {
+    axios
+      .get<{
+        status: number;
+        success: boolean;
+        response: { message: string; product: ProductDetail };
+      }>(`http://localhost:4000/api/products/${productId}`)
+      .then((res) => {
+        if (res.data.success) {
+          setProduct(res.data.response.product);
+        } else {
+          setHasError(true);
+        }
+      })
+      .catch(() => {
+        setHasError(true);
+      });
+  }, [productId]);
 
-  if (!product) {
+  if (hasError) {
     notFound();
+  }
+
+  if (product === null) {
+    return (
+      <div className="my-14 flex flex-col items-center space-y-3">
+        <Skeleton className="h-[125px] w-[250px] bg-gray-300 animate-pulse rounded-xl" />
+        <div className="space-y-2">
+          <Skeleton className="h-4 w-[250px]" />
+          <Skeleton className="h-4 w-[200px]" />
+        </div>
+      </div>
+    );
   }
 
   return (
@@ -19,10 +52,4 @@ export default async function Product({ params }: ProductPageProps) {
       <ProductPage product={product} />
     </div>
   );
-}
-
-export async function generateStaticParams() {
-  return Object.keys(productData).map((productId) => ({
-    productId,
-  }));
 }
