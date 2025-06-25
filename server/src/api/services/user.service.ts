@@ -2,7 +2,7 @@ import bcrypt from 'bcrypt';
 import { db } from '../../db/drizzle';
 import { userProfile, users } from '../../db/schema';
 import { eq } from 'drizzle-orm';
-import axios from 'axios';
+
 
 
 // export type Coordinate = [number, number];
