@@ -1,6 +1,6 @@
 import { Request } from "express";
 import { error, success } from "../../utils/response";
-import { createUserService, getUserByEmail } from "../services/user.service";
+import { createUserService, getUserByEmail, getUserById } from "../services/user.service";
 import bcrypt from "bcrypt";
 import { generateToken } from "../../utils/authUtil";
 
@@ -66,4 +66,22 @@ export async function loginUser(req: Request){
         token
     })
 
+}
+
+export async function getUserProfile(req: Request) {
+    const {userId} = req.query;
+
+    if(!userId){
+        return error("User ID is required", 400);
+    }
+
+    const user = await getUserById(userId as string);
+
+    if(!user){
+        return error("User not found", 404);
+    }
+    return success({
+        message: "User profile fetched successfully",
+        user : user,
+    })
 }

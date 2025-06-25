@@ -2,6 +2,7 @@ import { Request, Response } from "express";
 import * as productService from "../services/product.service";
 import { success, error } from "../../utils/response";
 
+
 export async function getAllProducts(_req: Request, res: Response) {
   const products = await productService.getAllProducts();
   return success({ message: "Products Fetched Successfully", products }, 200);
@@ -30,3 +31,5 @@ export async function deleteProduct(req: Request, res: Response) {
   if (!deleted) return error("Product not found", 404);
   return success({ message: "Product Deleted", deleted }, 200);
 }
+
+

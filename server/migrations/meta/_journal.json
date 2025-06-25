@@ -8,6 +8,41 @@
       "when": 1750583103987,
       "tag": "0000_broad_tarantula",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1750796599580,
+      "tag": "0001_loud_marvel_apes",
+      "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1750799183850,
+      "tag": "0002_rapid_hobgoblin",
+      "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "7",
+      "when": 1750835667764,
+      "tag": "0003_strong_mariko_yashida",
+      "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "7",
+      "when": 1750837718105,
+      "tag": "0004_powerful_king_bedlam",
+      "breakpoints": true
+    },
+    {
+      "idx": 5,
+      "version": "7",
+      "when": 1750837878711,
+      "tag": "0005_harsh_big_bertha",
+      "breakpoints": true
     }
   ]
 }

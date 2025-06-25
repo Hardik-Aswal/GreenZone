@@ -4,6 +4,8 @@ import leaderBoardRouter from "./api/routes/leaderboard.route";
 import userRouter from "./api/routes/user.route";
 import productRouter from "./api/routes/product.route";
 import reviewRouter from "./api/routes/review.route";
+import { requestLogger } from "./middlewares/requestLogger";
+import groupOrderRouter from "./api/routes/groupOrder.route";
 const app: Express = express();
 
 app.use(
@@ -14,9 +16,11 @@ app.use(
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+app.use(requestLogger)
 
 app.use("/api", leaderBoardRouter);
 app.use("/api/users", userRouter);
 app.use("/api/products", productRouter);
 app.use("/api/reviews", reviewRouter);
+app.use("/api/groupOrders", groupOrderRouter)
 export default app;
