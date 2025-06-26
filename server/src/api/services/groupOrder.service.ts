@@ -112,6 +112,11 @@ export async function compute(pincode: number) {
   };
 }
 
+export async function getAllPincodesFromDB(): Promise<string[]> {
+  const pincodes = await db.select({ pin_code: groupOrders.pin_code }).from(groupOrders);
+  return pincodes.map((p) => p.pin_code).filter((p) => p !== null && p !== undefined);
+}
+
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 

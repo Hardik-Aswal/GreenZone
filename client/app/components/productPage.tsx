@@ -283,7 +283,7 @@ export default function ProductPage({ product }: ProductPageProps) {
                   disabled={product.inStock === 0}
                 >
                   <Users className="h-4 w-4 mr-2" />
-                  {isInGroup ? "Remove from Group" : "Group By Order"}
+                  {isInGroup ? "Remove from Group" : "Group Buy"}
                   {isGroupComplete && !isInGroup && " (Ready!)"}
                 </Button>
 

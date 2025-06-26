@@ -8,11 +8,12 @@ import { Separator } from "@/components/ui/separator";
 import { useAppSelector, useAppDispatch } from "../store/hooks";
 import { removeItem, updateQuantity, clearCart } from "../store/cartSlice";
 import { formatIndianNumber } from "@/lib/utils";
+import { useRouter } from "next/navigation";
 
 export default function CartPage() {
   const dispatch = useAppDispatch();
   const { items, totalItems, totalAmount } = useAppSelector((s) => s.cart);
-
+  const router = useRouter();
   if (items.length === 0) {
     return (
       <div className="p-8 text-center">
@@ -100,7 +101,7 @@ export default function CartPage() {
           <span>₹{formatIndianNumber((totalAmount ?? 0).toFixed(2))}</span>
         </div>
         <Separator />
-        <Button className="w-full bg-yellow-400 text-black hover:bg-yellow-500">Proceed to Checkout</Button>
+        <Button className="w-full bg-yellow-400 text-black hover:bg-yellow-500" onClick={()=>{router.push("/checkout")}}>Proceed to Checkout</Button>
         <Button variant="outline" className="w-full" onClick={() => dispatch(clearCart())}>
           Clear Cart
         </Button>

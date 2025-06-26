@@ -10,6 +10,7 @@ import {
 } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
 import L from "leaflet";
+import { useParams } from "next/navigation";
 
 delete (L.Icon.Default.prototype as any)._getIconUrl;
 L.Icon.Default.mergeOptions({
@@ -24,7 +25,7 @@ L.Icon.Default.mergeOptions({
 export default function GroupOrderMap() {
   const [data, setData] = useState<any>(null);
   const [loading, setLoading] = useState(true);
-  const pincode = 110086;
+  const{ pincode }= useParams();
 
   useEffect(() => {
     const fetchData = async () => {

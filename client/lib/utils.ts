@@ -18,3 +18,39 @@ export function formatIndianNumber(price: string): string {
   const formatted = otherNumbers + lastThree;
   return decPart != null ? `${formatted}.${decPart}` : formatted;
 }
+
+
+export const saplingCalculator = (
+  carbonImpact: number,
+  packagingType: string,
+  deliveryType: string,
+  deliveryDistance: number
+): number => {
+  const packagingScores: Record<string, number> = {
+    "Recyclable Paper": 9.5,
+    "Reusable Glass": 9.0,
+    "Compostable Bagasse": 8.8,
+    "Minimal Packaging": 10.0,
+    "Biodegradable Plastic": 8.0,
+    "Standard": 4.0,
+  };
+
+  const normCarbonScore = Math.max(0, 1 - carbonImpact / 10);
+  const weightedCarbon = normCarbonScore * 50;
+
+  const packagingScore = packagingScores[packagingType] ?? 4.0;
+  const normPackaging = packagingScore / 10;
+  const weightedPackaging = normPackaging * 25;
+
+  const deliveryScore = deliveryType === "group" ? 1 : 0.5;
+  const weightedDelivery = deliveryScore * 15;
+
+  const normDistanceScore = Math.max(0, 1 - deliveryDistance / 20);
+  const weightedDistance = normDistanceScore * 10;
+
+  const saplingCoins = Math.round(
+    weightedCarbon + weightedPackaging + weightedDelivery + weightedDistance
+  );
+
+  return saplingCoins;
+};

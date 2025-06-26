@@ -9,7 +9,7 @@ export default function Home() {
   const [notification, setNotification] = useState('');
   const [showNotification, setShowNotification] = useState(false);
   useEffect(() => {
-    const apiToken = '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';
+    const apiToken = process.env.NEXT_PUBLIC_API_KEY as string;
 
     async function getLlamaResponse() {
       try {
