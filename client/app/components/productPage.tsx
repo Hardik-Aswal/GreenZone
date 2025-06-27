@@ -369,7 +369,6 @@ export default function ProductPage({ product }: ProductPageProps) {
         </div>
       </div>
 
-      {/* Product Information Tabs */}
       <div className="mt-12">
         <Tabs defaultValue="description" className="w-full">
           <TabsList className="grid w-full grid-cols-3">
