@@ -100,7 +100,7 @@ export default function CartPage() {
           <span>₹{formatIndianNumber((totalAmount ?? 0).toFixed(2))}</span>
         </div>
         <Separator />
-        <Button className="w-full bg-yellow-400 text-black hover:bg-yellow-500 cursor-pointer">
+        <Button className="w-full bg-yellow-400 text-black hover:bg-yellow-500 cursor-pointer" onClick={() => router.push("/checkout")}>
           Proceed to Checkout
         </Button>
         <Button

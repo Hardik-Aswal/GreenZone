@@ -1,4 +1,4 @@
-import { pgTable, uuid, text, numeric, boolean, timestamp, integer, json } from "drizzle-orm/pg-core";
+import { pgTable, uuid, text, numeric, boolean, timestamp, integer, json, jsonb } from "drizzle-orm/pg-core";
 import { packagingTypes } from "./packagingTypes";
 import { users } from "./users";
 import { relations } from "drizzle-orm";
@@ -33,6 +33,8 @@ export const products = pgTable("products", {
     .references(() => packagingTypes.id, { onDelete: "cascade" }),
 
   ecoTags: text("eco_tags").array().notNull(),
+  metrics : jsonb("metrics").default([]),
+  certifications: jsonb("certifications").default([]),
 
   supportsEcoPackaging: boolean("supports_eco_packaging").notNull().default(false),
   deliveryType: text("delivery_type").array().notNull(),
