@@ -37,6 +37,8 @@ const packagingOptions: { value: PackagingType; label: string; score: string }[]
   { value: PackagingType.MinimalPackaging, label: "Minimal Packaging", score: "10.0" },
 ];
 export default function ProductPage({ product }: ProductPageProps) {
+  const [metrics, setMetrics] = useState(product.metrics);
+  const [certifications, setCertifications] = useState(product.certifications);
   const [selectedImage, setSelectedImage] = useState(0);
   const [quantity, setQuantity] = useState(1);
   const [isAdding, setIsAdding] = useState(false);
@@ -89,7 +91,11 @@ export default function ProductPage({ product }: ProductPageProps) {
       />
     ));
   };
-
+  const getColor = (score: number) => {
+  if (score >= 7) return "border-green-500 text-green-600";
+  if (score >= 4) return "border-yellow-400 text-yellow-500";
+  return "border-red-500 text-red-600";
+};
   return (
     <div className="max-w-7xl mx-auto px-4 py-6">
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
@@ -138,7 +144,11 @@ export default function ProductPage({ product }: ProductPageProps) {
                 {product.brand}
               </Badge>
               <h1 className="text-2xl font-bold text-gray-900 mb-3">{product.title}</h1>
-
+              <p className="text-green-600">Env Score : 
+  {metrics && metrics.length > 0
+    ? (metrics.reduce((sum, metric) => sum + metric?.score, 0) / metrics.length).toFixed(2)
+    : "N/A"}
+</p>
               {product.ecoTags && product.ecoTags.length > 0 && (
                 <div className="flex flex-wrap gap-2 mb-4">
                   {product.ecoTags.map((tag, index) => (
@@ -150,7 +160,20 @@ export default function ProductPage({ product }: ProductPageProps) {
                 </div>
               )}
             </div>
-
+               <div className="space-y-2">
+      {metrics?.map((metric, i) => (
+        <div key={i} className="flex items-center space-x-2">
+          <div
+            className={`w-6 h-6 border-2 rounded-full flex items-center justify-center text-sm font-semibold ${getColor(metric.score)}`}
+          >
+            {metric.score.toFixed(1)}
+          </div>
+          <span className="text-gray-800 text-sm">
+            {metric.metricTitle}
+          </span>
+        </div>
+      ))}
+    </div>
             <div className="flex items-center space-x-2">
               <div className="flex items-center">
                 {renderStars(averageRating)}

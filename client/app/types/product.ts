@@ -25,6 +25,8 @@ export interface ProductDetail {
   sellerId: string;
   reviews?: Review[];
   isBestSeller?: boolean;
+  metrics? : [];
+  certifications? : [];
 }
 
 export interface Review {

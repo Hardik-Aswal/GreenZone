@@ -80,7 +80,7 @@ export default function SignInPage() {
 
         // Redirect based on role
         if (data.response.user.role === "admin") {
-          router.push("/admin/pincodes");
+          router.push("/admin/addProduct");
         } else {
           router.push("/");
         }
