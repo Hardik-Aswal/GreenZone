@@ -18,6 +18,7 @@ import ProductReviews from "./productReview";
 import { addItem } from "../store/cartSlice";
 import { formatIndianNumber } from "@/lib/utils";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 
 interface ProductPageProps {
   product: ProductDetail;
@@ -63,6 +64,7 @@ export default function ProductPage({ product }: ProductPageProps) {
   const originalPrice = product.originalPrice * 1.0;
   const discountAmount = (product.discount * originalPrice) / 100;
   const finalPrice = originalPrice - discountAmount;
+  const avgScore = (product.metrics.reduce((sum, metric) => sum + metric?.score, 0) / metrics.length).toFixed(2);
 
   const handleAddToCart = async (e: React.MouseEvent) => {
     e.preventDefault();
@@ -144,11 +146,40 @@ export default function ProductPage({ product }: ProductPageProps) {
                 {product.brand}
               </Badge>
               <h1 className="text-2xl font-bold text-gray-900 mb-3">{product.title}</h1>
-              <p className="text-green-600">Env Score : 
-  {metrics && metrics.length > 0
-    ? (metrics.reduce((sum, metric) => sum + metric?.score, 0) / metrics.length).toFixed(2)
-    : "N/A"}
-</p>
+              
+               <TooltipProvider>
+      {avgScore > 6 ? (
+        <Tooltip>
+          <TooltipTrigger asChild>
+            <p className="text-green-600 cursor-help inline-block">
+              Env Score : &nbsp;
+              <span className="font-semibold">{metrics && metrics.length > 0 ? avgScore : "N/A"}</span>
+            </p>
+          </TooltipTrigger>
+          <TooltipContent side="bottom" align="start" className="p-3 bg-white border shadow-lg">
+            <div className="space-y-2">
+              {metrics?.map((metric, i) =>
+                avgScore > 6 ? (
+                  <div key={i} className="flex items-center space-x-2">
+                    <div
+                      className={`w-6 h-6 border-2 rounded-full flex items-center justify-center text-xs font-bold ${getColor(metric.score)}`}
+                    >
+                      {metric.score.toFixed(1)}
+                    </div>
+                    <span className="text-gray-800 text-sm">{metric.metricTitle}</span>
+                  </div>
+                ) : (
+                  <p key={i}></p>
+                ),
+              )}
+            </div>
+          </TooltipContent>
+        </Tooltip>
+      ) : (
+        <></>
+      )}
+    </TooltipProvider>
+
               {product.ecoTags && product.ecoTags.length > 0 && (
                 <div className="flex flex-wrap gap-2 mb-4">
                   {product.ecoTags.map((tag, index) => (
@@ -160,20 +191,39 @@ export default function ProductPage({ product }: ProductPageProps) {
                 </div>
               )}
             </div>
-               <div className="space-y-2">
-      {metrics?.map((metric, i) => (
-        <div key={i} className="flex items-center space-x-2">
-          <div
-            className={`w-6 h-6 border-2 rounded-full flex items-center justify-center text-sm font-semibold ${getColor(metric.score)}`}
-          >
-            {metric.score.toFixed(1)}
-          </div>
-          <span className="text-gray-800 text-sm">
-            {metric.metricTitle}
-          </span>
+                  {certifications && certifications.length > 0 && (
+        <div className="flex gap-2 flex-wrap mt-2">
+          {certifications.map((cert, index) => (
+            <div key={index} className="relative group">
+    
+              <div className="relative overflow-hidden rounded-full p-1 bg-gradient-to-br from-green-50 to-emerald-100 shadow-lg hover:shadow-lg cursor-pointer border-2 border-white">
+                <img
+                  src={cert.badge || "/placeholder.svg"}
+                  alt={cert.certificationTitle}
+                  className="h-12 w-12 object-contain rounded-full bg-white p-1"
+                />
+               
+                <div className="absolute inset-0 rounded-full bg-gradient-to-br from-green-400/20 to-emerald-500/20 opacity-0 group-hover:opacity-100" />
+              </div>
+
+           
+              <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-3 opacity-0 group-hover:opacity-100 pointer-events-none z-20">
+                <div className="relative">
+         
+                  <div className="px-3 py-2 bg-gray-900 text-white text-sm font-medium rounded-lg shadow-xl whitespace-nowrap max-w-xs text-center border border-gray-700">
+                    {cert.certificationTitle}
+                  </div>
+                 
+                  <div className="absolute top-full left-1/2 -translate-x-1/2 w-0 h-0 border-l-4 border-r-4 border-t-4 border-l-transparent border-r-transparent border-t-gray-900" />
+                </div>
+              </div>
+            </div>
+          ))}
         </div>
-      ))}
-    </div>
+      )}
+
+
+  
             <div className="flex items-center space-x-2">
               <div className="flex items-center">
                 {renderStars(averageRating)}

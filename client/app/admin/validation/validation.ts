@@ -24,7 +24,7 @@ export const productInfoSchema = z.object({
   material2: z.string().min(1, "Secondary material is required"),
   weight: z.number().min(0.01, "Weight must be greater than 0"),
   inStock: z.number().int().min(0, "Stock cannot be negative"),
-  carbonImpact: z.number().min(0, "Carbon impact cannot be negative"),
+
   packagingTypeId: z.string().min(1, "Packaging type is required"),
   ecoTags: z.array(z.string()).max(5, "Maximum 5 eco tags allowed"),
 })

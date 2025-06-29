@@ -16,7 +16,7 @@ import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 
 import { log } from 'console';
-import { FaHistory, FaLeaf, FaLessThan, FaTree } from 'react-icons/fa';
+import { FaBook, FaDollarSign, FaHistory, FaLeaf, FaLessThan, FaTree } from 'react-icons/fa';
 import { HiSpeakerphone } from 'react-icons/hi';
 import { LucideBadgePercent } from 'lucide-react';
 import { useAppDispatch } from '../store/hooks';
@@ -67,12 +67,28 @@ const dispatch = useAppDispatch();
         />
   
         <Option
-          Icon={MdLeaderboard}
+          Icon={FaBook}
           title="Learn"
           selected={selected}
           setSelected={setSelected}
           open={open}
           href="/admin/learn"
+        />
+        <Option
+                   Icon={MdLeaderboard}
+          title="Leaderboard"
+          selected={selected}
+          setSelected={setSelected}
+          open={open}
+          href="/admin/leaderboard"
+        />
+        <Option
+                   Icon={FaDollarSign}
+          title="Rewards"
+          selected={selected}
+          setSelected={setSelected}
+          open={open}
+          href="/admin/rewards"
         />
   
         <Option

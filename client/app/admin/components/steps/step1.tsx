@@ -109,7 +109,7 @@ export function Step1ProductInfo({ onNext }: Step1Props) {
       "material2",
       "weight",
       "inStock",
-      "carbonImpact",
+   
       "packagingTypeId",
     ])
 
@@ -159,7 +159,7 @@ export function Step1ProductInfo({ onNext }: Step1Props) {
           name="originalPrice"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Original Price ($) *</FormLabel>
+              <FormLabel>Original Price (Rs) *</FormLabel>
               <FormControl>
                 <Input
                   type="number"
@@ -500,25 +500,7 @@ export function Step1ProductInfo({ onNext }: Step1Props) {
           )}
         />
 
-        <FormField
-          control={form.control}
-          name="carbonImpact"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Carbon Impact (kg CO2) *</FormLabel>
-              <FormControl>
-                <Input
-                  type="number"
-                  step="0.01"
-                  placeholder="0.00"
-                  {...field}
-                  onChange={(e) => field.onChange(Number.parseFloat(e.target.value) || 0)}
-                />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
+       
       </div>
 
       {/* Eco Tags */}

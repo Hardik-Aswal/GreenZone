@@ -69,12 +69,12 @@ const ModeToggle = ({
   return (
     <button
       onClick={() => setMode(mode === "green" ? "home" : "green")}
-      className={`p-2 w-28 rounded-full flex shadow-lg relative bg-gradient-to-b ${
+      className={` w-20 rounded-full flex shadow-lg relative bg-gradient-to-b ${
         mode === "home" ? "justify-end from-slate-500 to-slate-700" : "justify-start from-green-700 to-green-400"
       }`}
     >
       <Thumb mode={mode} />
-      {mode === "home" && <FaAmazon className="absolute right-16 top-3 text-3xl" />}
+      {mode === "home" && <FaAmazon className="absolute right-10 top-1 text-2xl" />}
       {mode === "green" && <Leaf />}
     </button>
   );
@@ -88,7 +88,7 @@ const Thumb = ({ mode }: { mode: "green" | "home" }) => {
         duration: 0.75,
         type: "spring",
       }}
-      className="h-10 w-10 rounded-full overflow-hidden shadow-lg relative"
+      className="h-8 w-8 rounded-full overflow-hidden shadow-lg relative"
     >
       <div
         className={`absolute inset-0 ${
@@ -154,17 +154,7 @@ const Leaf = () => {
       >
         <FaLeaf />
       </motion.span>
-      <motion.span
-        animate={{ x: [-20, -15, -10, -5, 0], opacity: [0, 1, 0.75, 1, 0] }}
-        transition={{
-          duration: 10,
-          repeat: Infinity,
-          delay: 0.25,
-        }}
-        className="text-slate-300 absolute right-8 top-8 text-lg"
-      >
-        <FaLeaf />
-      </motion.span>
+  
     </>
   );
 };

@@ -52,11 +52,11 @@ export function Step3Review({ onPrevious, onSubmit, isSubmitting }: Step3Props) 
               <h3 className="font-semibold text-lg">{formData.title}</h3>
               <p className="text-muted-foreground">by {formData.brand}</p>
               <div className="flex items-center gap-2 mt-2">
-                <span className="text-2xl font-bold">${calculateFinalPrice().toFixed(2)}</span>
+                <span className="text-2xl font-bold">Rs{calculateFinalPrice().toFixed(2)}</span>
                 {formData.discount > 0 && (
                   <>
                     <span className="text-sm line-through text-muted-foreground">
-                      ${formData.originalPrice.toFixed(2)}
+                      Rs{formData.originalPrice.toFixed(2)}
                     </span>
                     <Badge variant="destructive">{formData.discount}% OFF</Badge>
                   </>
